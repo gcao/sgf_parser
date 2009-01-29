@@ -1,5 +1,6 @@
 require 'sgf/game'
 require 'sgf/node'
+require 'sgf/property'
 
 module SGF
   class SGFError < StandardError
@@ -51,7 +52,7 @@ module SGF
     end
 
     def parse_file(file)
-      File.open(file) { |@inp| parse }
+      File.open(file) { |@inp| parse_input }
     end
 
     def parse(data)
@@ -62,6 +63,7 @@ module SGF
     private
 
     def parse_input
+      game = Game.new
       @old_format = false
       @read_mode = 'normal'
 
@@ -69,7 +71,7 @@ module SGF
         while not @inp.eof?
           c = getchar
           if c == ?(
-            push(read_tree)
+            game.push(read_tree)
           end
         end
       rescue SGFError => e
@@ -80,23 +82,24 @@ module SGF
           @inp.rewind
           c = getchar
           c = getchar while c != ?(
-          push(read_gifus_tree)
+          game.push(read_gifus_tree)
         else
           raise
         end
       end
 
       $stderr.puts "Warning: old SGF format detected" if @old_format
+      game
     end
 
     def getchar
       c = @inp.getc
-      c = @inp.getc while c== ?\n or c==?\r or c ==?\t or c==32
+      c = @inp.getc while c == ?\n or c == ?\r or c == ?\t or c == 32
 
       return c
     end
 
-    def add_var(current,root_node)
+    def add_var(current, root_node)
       if current.next.nil?
         current.next = root_node
         root_node.c_var = ?A
@@ -246,7 +249,7 @@ module SGF
             current.push(p)
           rescue PropertyError
             # bad property: try to skip 
-            $stderr.puts("skip: "+$!)
+            $stderr.puts("skip: " + $!)
             c = @inp.getc while c != ?\n and c != ?\;
 
             @inp.ungetc(c)
@@ -254,7 +257,7 @@ module SGF
         end
       end
 
-      raise(SGFError.new,'end of file reached after: '+buf)
+      raise(SGFError.new,'end of file reached after: ' + buf)
     end
 
     def read_prop
@@ -315,7 +318,7 @@ module SGF
         end
       end
 
-      raise(SGFError.new,'end of file reached after: ' + str)
+      raise(SGFError.new, 'end of file reached after: ' + str)
     end
 
     def read_text

@@ -14,12 +14,6 @@ module SGF
       buf
     end
 
-    def action(g)
-    end
-
-    def undo(g)
-    end
-
     def push(val)
       @values.push(val)
     end
@@ -185,9 +179,9 @@ module SGF
       when 'AN'
         'Annotations'
       when 'BR'
-        'Black rank'
+        'Black Rank'
       when 'BT'
-        'Black team'
+        'Black Team'
       when 'CP'
         'Copyright'
       when 'DT'
@@ -221,9 +215,9 @@ module SGF
       when 'US'
         'User'
       when 'WR'
-        'White rank'
+        'White Rank'
       when 'WT'
-        'White'
+        'White Team'
       when 'ID'
         'Game Number'
       when 'HA'
@@ -278,29 +272,30 @@ module SGF
   end
 
   Property.class_eval do
-    Klass = { 'W'=> PMove, 'B'=> PMove ,'MN'=> PMove, 'KO'=> PMove ,
-      'SZ'=> PRoot, 'AP'=> PRoot , 'CA'=> PRoot , 'FF'=> PRoot , 'GM'=> PRoot , 
-      'ST'=> PRoot, 'SY'=>PRoot, # SY=AP by Cgoban 1.9.2
-      'AN'=> PInfo, 'BR'=> PInfo, 'BT'=> PInfo, 'CP'=> PInfo, 'DT'=> PInfo,
-      'EV'=> PInfo, 'GN'=> PInfo, 'GC'=> PInfo, 'ON'=> PInfo, 'OT'=> PInfo,
-      'TO'=> PInfo_TO, # private prop for OT in sgf5 -> discarded
-      'PB'=> PInfo, 'PC'=> PInfo, 'PW'=> PInfo, 'RE'=> PInfo, 'RO'=> PInfo,
-      'HA'=> PInfo, 'KM'=> PInfo,'ID'=> PInfo, #not documented. used for igs game number
-      'RU'=> PInfo, 'SO'=> PInfo, 'TM'=> PInfo, 'US'=> PInfo, 'WR'=> PInfo, 'WT'=> PInfo,
-      'BM'=> PAnnot, 'DO'=> PAnnot, 'IT'=> PAnnot, 'TE'=> PAnnot,
-      'N' => PNode, 'C'=> PNode, 'V'=> PNode, 'DM'=> PNode, 'GB'=> PNode,
-      'GW'=> PNode, 'HO'=> PNode, 'UC'=> PNode,
-      'AB' => PSetup, 'AE' => PSetup, 'AW' => PSetup, 'PL' => PSetup ,
-      'AR'=> PMark, 'CR'=> PMark, 'DD'=> PMark, 'LB'=> PMark, 'LN'=> PMark,
-      'MA'=> PMark, 'SL'=> PMark, 'SQ'=> PMark, 'TR' => PMark,
-      'M'=> PMark, 'L' => PMark, # old sgf format Mark and Letters
-      'TB'=> PGo, 'TW'=> PGo, 'DA'=> PGo, # new: Dame
-      'WP'=> PGo, 'BP'=> PGo, # not standard: prisoners -> discarded
-      'BL'=> PTime, 'OB'=> PTime, 'OW'=> PTime, 'WL'=> PTime,
-      'VW'=> PPrint, 'PM'=> PPrint, 'FG'=> PPrint ,
-      'NW'=>PUnknown,'NB'=>PUnknown,'LT'=>PUnknown,
-      'PT'=>PUnknown,'RN'=>PUnknown,'RD'=>PUnknown,
-      'LC'=>PUnknown
+    Klass = { 
+      'W'  => PMove, 'B'  => PMove, 'MN' => PMove, 'KO' => PMove,
+      'SZ' => PRoot, 'AP' => PRoot, 'CA' => PRoot, 'FF' => PRoot, 'GM' => PRoot, 
+      'ST' => PRoot, 'SY' => PRoot, 'AP' => PRoot, # SY=AP by Cgoban 1.9.2
+      'AN' => PInfo, 'BR' => PInfo, 'BT' => PInfo, 'CP' => PInfo, 'DT' => PInfo,
+      'EV' => PInfo, 'GN' => PInfo, 'GC' => PInfo, 'ON' => PInfo, 'OT' => PInfo,
+      'TO' => PInfo_TO, # private prop for OT in sgf5 -> discarded
+      'PB' => PInfo, 'PC' => PInfo, 'PW' => PInfo, 'RE' => PInfo, 'RO' => PInfo,
+      'HA' => PInfo, 'KM' => PInfo, 'ID' => PInfo, #not documented. used for igs game number
+      'RU' => PInfo, 'SO' => PInfo, 'TM' => PInfo, 'US' => PInfo, 'WR' => PInfo, 'WT' => PInfo,
+      'BM' => PAnnot, 'DO' => PAnnot, 'IT' => PAnnot, 'TE' => PAnnot,
+      'N'  => PNode, 'C'  => PNode, 'V'  => PNode, 'DM' => PNode, 'GB' => PNode,
+      'GW' => PNode, 'HO' => PNode, 'UC' => PNode,
+      'AB' => PSetup, 'AE' => PSetup, 'AW' => PSetup, 'PL' => PSetup,
+      'AR' => PMark, 'CR' => PMark, 'DD' => PMark, 'LB' => PMark, 'LN' => PMark,
+      'MA' => PMark, 'SL' => PMark, 'SQ' => PMark, 'TR' => PMark,
+      'M'  => PMark, 'L'  => PMark, # old sgf format Mark and Letters
+      'TB' => PGo,   'TW' => PGo,   'DA' => PGo, # new: Dame
+      'WP' => PGo,   'BP' => PGo, # not standard: prisoners -> discarded
+      'BL' => PTime, 'OB' => PTime, 'OW' => PTime, 'WL' => PTime,
+      'VW' => PPrint, 'PM' => PPrint, 'FG' => PPrint ,
+      'NW' => PUnknown, 'NB' => PUnknown, 'LT' => PUnknown,
+      'PT' => PUnknown, 'RN' => PUnknown, 'RD' => PUnknown,
+      'LC' => PUnknown
     }
 
     def self.create(ident)
