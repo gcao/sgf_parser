@@ -1,0 +1,19 @@
+grammer SGF
+  rule game
+    '(' root_node node* ')'
+  end
+  
+  rule root_node
+    ';'?
+  end
+  
+  rule game_name
+    'GN' '[' value:(!']' .) ']' {
+      def game_name
+      end
+    }
+  end
+  
+  rule node
+  end
+end
