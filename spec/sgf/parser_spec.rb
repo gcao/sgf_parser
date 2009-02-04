@@ -3,7 +3,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 module SGF
   describe Parser do
     before :each do
-      @listener = EventListener.new
+      @listener = DefaultEventListener.new
       @parser = Parser.new @listener
     end
 

@@ -1,5 +1,5 @@
 module SGF
-  class EventListener
+  class DefaultEventListener
     def start_game
     end
     
