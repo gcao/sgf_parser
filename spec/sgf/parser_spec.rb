@@ -1,7 +1,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 module SGF
-  describe Parser do
+  describe Parser, 'with DefaultEventListener' do
     before :each do
       @listener = DefaultEventListener.new
       @parser = Parser.new @listener
@@ -46,6 +46,18 @@ module SGF
     it "should call end_variation" do
       mock(@listener).end_variation
       @parser.parse("(;(;))")
+    end
+  end
+  
+  describe Parser, 'with SGF::Model::EventListener' do
+    before :each do
+      @listener = SGF::Model::EventListener.new
+      @parser = Parser.new @listener
+    end
+    
+    it "should set game name" do
+      @parser.parse("(;GN[a game])")
+      @listener.game.name.should == 'a game'
     end
   end
 end
