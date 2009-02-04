@@ -1,0 +1,5 @@
+require 'sgf/state_machine'
+require 'sgf/sgf_state_machine'
+require 'sgf/parser'
+require 'sgf/event_listener'
+require 'sgf/parser'

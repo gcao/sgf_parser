@@ -1,8 +1,5 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-require File.expand_path(File.dirname(__FILE__) + '/../../lib/sgf/parser')
-require File.expand_path(File.dirname(__FILE__) + '/../../lib/sgf/event_listener')
-
 module SGF
   describe Parser do
     before :each do
@@ -26,9 +23,29 @@ module SGF
       @parser.parse("(")
     end
     
-    it "should read game name" do
-      mock(@listener).set_game_name('a game')
+    it "should call start_node" do
+      mock(@listener).start_node
+      @parser.parse("(;")
+    end
+    
+    it "should call end_game" do
+      mock(@listener).end_game
+      @parser.parse("(;)")
+    end
+    
+    it "should call set_property with name and value" do
+      mock(@listener).set_property('GN', 'a game')
       @parser.parse("(;GN[a game])")
+    end
+    
+    it "should call start_variation" do
+      mock(@listener).start_variation
+      @parser.parse("(;(")
+    end
+    
+    it "should call end_variation" do
+      mock(@listener).end_variation
+      @parser.parse("(;(;))")
     end
   end
 end

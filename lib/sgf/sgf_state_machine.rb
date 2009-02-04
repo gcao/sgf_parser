@@ -14,14 +14,18 @@ module SGF
     def state_machine
       @sgf_stm = StateMachine.new(STATE_BEGIN)
       
-      @sgf_stm.transition STATE_BEGIN, /\(/, STATE_GAME_BEGIN
-      # @sgf_stm.transition STATE_GAME_BEGIN, /;/, STATE_NODE
-      # @sgf_stm.transition STATE_NODE, /\(/, STATE_VAR_BEGIN
-      # @sgf_stm.transition STATE_VAR_BEGIN, /[a-zA-Z]/, STATE_PROP_NAME
-      # @sgf_stm.transition STATE_PROP_NAME, /\[/, STATE_VALUE_BEGIN
-      # @sgf_stm.transition STATE_VALUE_BEGIN, /[^\]]/, STATE_VALUE
-      # @sgf_stm.transition STATE_VALUE, /\]/, STATE_VALUE_END
-      # @sgf_stm.transition STATE_VALUE_END, /\)/, STATE_GAME_VAR_END
+      @sgf_stm.transition STATE_BEGIN,        /\(/,        STATE_GAME_BEGIN
+      @sgf_stm.transition [STATE_GAME_BEGIN, STATE_VAR_BEGIN, STATE_GAME_VAR_END, STATE_VALUE_END],   
+                                              /;/,         STATE_NODE
+      @sgf_stm.transition [STATE_NODE, STATE_GAME_VAR_END, STATE_VALUE_END],
+                                              /\(/,        STATE_VAR_BEGIN
+      @sgf_stm.transition [STATE_NODE, STATE_VALUE_END],
+                                              /[a-zA-Z]/,  STATE_PROP_NAME
+      @sgf_stm.transition STATE_PROP_NAME,    /\[/,        STATE_VALUE_BEGIN
+      @sgf_stm.transition STATE_VALUE_BEGIN,  /[^\]]/,     STATE_VALUE
+      @sgf_stm.transition STATE_VALUE,        /\]/,        STATE_VALUE_END
+      @sgf_stm.transition [STATE_NODE, STATE_VALUE_END],
+                                              /\)/,        STATE_GAME_VAR_END
       
       @sgf_stm
     end
