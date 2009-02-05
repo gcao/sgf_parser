@@ -14,12 +14,16 @@ module SGF
         @game = Game.new
       end
       
+      def start_node
+        game.nodes << (@node = Node.new)
+      end
+      
       def set_property name, value
         return unless name
         name = name.strip.upcase
         
         unless set_game_property(name, value)
-          # set property on current node
+          set_node_property(name, value)
         end
       end
       
@@ -28,9 +32,16 @@ module SGF
       def set_game_property name, value
         GAME_PROPERTY_MAPPINGS.each do |sgf_prop_name, game_attr_name|
           if name == sgf_prop_name
-            game.send(:"#{game_attr_name}=", value)
+            game.send(:"#{game_attr_name}=", value.strip)
             return true
           end
+        end
+      end
+      
+      def set_node_property name, value
+        case name
+        when 'C'
+          @node.comment = value
         end
       end
     end

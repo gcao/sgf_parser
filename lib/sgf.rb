@@ -6,3 +6,4 @@ require 'sgf/parser'
 
 require 'sgf/model/event_listener'
 require 'sgf/model/game'
+require 'sgf/model/node'

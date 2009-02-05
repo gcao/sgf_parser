@@ -31,8 +31,10 @@ module SGF
         when STATE_VALUE
           prop_value << char
         when STATE_VALUE_END
-          @event_listener.set_property(prop_name, prop_value)
-          prop_name = prop_value = ""
+          prop_name.strip!
+          @event_listener.set_property(prop_name, prop_value) if prop_name.size > 0
+          prop_name = ""
+          prop_value = ""
         when STATE_VAR_BEGIN
           @event_listener.start_variation
         when STATE_GAME_VAR_END

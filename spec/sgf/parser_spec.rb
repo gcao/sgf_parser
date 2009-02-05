@@ -56,8 +56,34 @@ module SGF
     end
     
     it "should set game name" do
-      @parser.parse("(;GN[a game])")
-      @listener.game.name.should == 'a game'
+      @parser.parse <<-INPUT
+      (;GM[1]FF[3]
+      RU[Japanese]SZ[19]HA[0]KM[5.5]
+      PW[White]
+      PB[Black]
+      GN[White (W) vs. Black (B)]
+      DT[1999-07-28]
+      SY[Cgoban 1.9.2]TM[30:00(5x1:00)];
+      AW[ea][eb][ec][bd][dd][ae][ce][de][cf][ef][cg][dg][eh][ci][di][bj][ej]
+      AB[da][db][cc][dc][cd][be][bf][ag][bg][bh][ch][dh]LB[bd:A]PL[2]
+      C[guff plays A and adum tenukis to fill a 1-point ko. white to kill.
+      ]
+      (;W[bc];B[bb]
+      (;W[ca];B[cb]
+      (;W[ab];B[ba]
+      (;W[bi]
+      C[RIGHT black can't push (but no such luck in the actual game)
+      ])
+      )))
+      )
+      INPUT
+      @listener.game.name.should == 'White (W) vs. Black (B)'
+      @listener.game.rule.should == 'Japanese'
+      @listener.game.board_size.should == 19
+      @listener.game.handicap.should == 0
+      @listener.game.komi.should == 5.5
+      @listener.game.white_player.should == 'White'
+      @listener.game.black_player.should == 'Black'
     end
   end
 end

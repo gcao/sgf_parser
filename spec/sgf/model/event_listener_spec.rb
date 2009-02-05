@@ -27,7 +27,7 @@ module SGF
       
       EventListener::GAME_PROPERTY_MAPPINGS.each do |prop_name, attr_name|
         it "set_property with property name as #{prop_name} should set #{attr_name} on game" do
-          @listener.set_property(prop_name, '123')
+          @listener.set_property(prop_name, ' 123 ')
           
           game_attr_value = @listener.game.send(attr_name.to_sym)
           if [Fixnum, Float].include?(game_attr_value.class)
@@ -36,6 +36,17 @@ module SGF
             game_attr_value.should == '123'
           end
         end
+      end
+
+      it "should create a node on start_node" do
+        @listener.start_node
+        @listener.game.nodes.size.should == 1
+      end
+      
+      it "set_property('C', ...) should add comment to node" do
+        @listener.start_node
+        @listener.set_property('C', 'comment')
+        @listener.game.root_node.comment.should == 'comment'
       end
       
     end
