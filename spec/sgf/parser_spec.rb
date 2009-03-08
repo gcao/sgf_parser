@@ -38,6 +38,12 @@ module SGF
       @parser.parse("(;GN[a game])")
     end
     
+    it "should call set_property with same name and different values" do
+      mock(@listener).set_property('AB', 'DB')
+      mock(@listener).set_property('AB', 'KS')
+      @parser.parse("(;AB[DB][KS])")
+    end
+    
     it "should call start_variation" do
       mock(@listener).start_variation
       @parser.parse("(;(")

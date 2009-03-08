@@ -26,17 +26,20 @@ module SGF
           @event_listener.start_game
         when STATE_NODE
           @event_listener.start_node
+          prop_name = ""
+        when STATE_PROP_NAME_BEGIN
+          prop_name = char
         when STATE_PROP_NAME
           prop_name << char
         when STATE_VALUE
           prop_value << char
         when STATE_VALUE_END
           prop_name.strip!
-          @event_listener.set_property(prop_name, prop_value) if prop_name.size > 0
-          prop_name = ""
+          @event_listener.set_property(prop_name, prop_value) if prop_name.size > 0 and prop_value.size > 0
           prop_value = ""
         when STATE_VAR_BEGIN
           @event_listener.start_variation
+          prop_name = ""
         when STATE_GAME_VAR_END
           if i == input.size - 1
             @event_listener.end_game

@@ -1,6 +1,10 @@
 module SGF
   module Model
     class EventListener < SGF::DefaultEventListener
+      def initialize debug_mode = false
+        super(debug_mode)
+      end
+      
       GAME_PROPERTY_MAPPINGS = {
         'GN' => :name, 'RU' => :rule, 'SZ' => :board_size, 'HA' => :handicap, 'KM' => :komi,
         'PW' => :white_player, 'PB' => :black_player, 'DT' => :played_on
@@ -11,14 +15,20 @@ module SGF
       end
       
       def start_game
+        super
+        
         @game = Game.new
       end
       
       def start_node
+        super
+        
         game.nodes << (@node = Node.new)
       end
       
       def set_property name, value
+        super
+        
         return unless name
         name = name.strip.upcase
         
