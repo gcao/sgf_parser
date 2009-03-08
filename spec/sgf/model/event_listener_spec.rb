@@ -27,14 +27,8 @@ module SGF
       
       EventListener::GAME_PROPERTY_MAPPINGS.each do |prop_name, attr_name|
         it "set_property with property name as #{prop_name} should set #{attr_name} on game" do
+          mock(@listener.game).send(attr_name, '123')
           @listener.set_property(prop_name, ' 123 ')
-          
-          game_attr_value = @listener.game.send(attr_name.to_sym)
-          if [Fixnum, Float].include?(game_attr_value.class)
-            game_attr_value.should == 123
-          else
-            game_attr_value.should == '123'
-          end
         end
       end
 

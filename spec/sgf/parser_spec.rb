@@ -83,14 +83,19 @@ module SGF
       )))
       )
       INPUT
-      @listener.game.name.should == 'White (W) vs. Black (B)'
-      @listener.game.rule.should == 'Japanese'
-      @listener.game.board_size.should == 19
-      @listener.game.handicap.should == 0
-      @listener.game.komi.should == 5.5
-      @listener.game.played_on.should == "1999-07-28"
-      @listener.game.white_player.should == 'White'
-      @listener.game.black_player.should == 'Black'
+      game = @listener.game
+      game.name.should == 'White (W) vs. Black (B)'
+      game.rule.should == 'Japanese'
+      game.board_size.should == 19
+      game.handicap.should == 0
+      game.komi.should == 5.5
+      game.played_on.should == "1999-07-28"
+      game.white_player.should == 'White'
+      game.black_player.should == 'Black'
+      game.application.should == 'Cgoban 1.9.2'
+      game.time_rule.should == '30:00(5x1:00)'
+      game.root_node.type.should == SGF::Model::Constants::NODE_SETUP
+      game.root_node.comment.should == "guff plays A and adum tenukis to fill a 1-point ko. white to kill."
     end
   end
 end

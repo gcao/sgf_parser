@@ -5,11 +5,12 @@ module SGF
       GAME_PROPERTY_MAPPINGS = {
         'GN' => :name=, 'RU' => :rule=, 'SZ' => :board_size=, 'HA' => :handicap=, 'KM' => :komi=,
         'PW' => :white_player=, 'PB' => :black_player=, 'DT' => :played_on=, 'TM' => :time_rule=,
-        'SY' => :application=, "AB" => :sgf_setup_black, "AW" => :sgf_setup_white
+        'SY' => :application=
       }
       
       NODE_PROPERTY_MAPPINGS = {
-        "C" => :comment=, "B" => :sgf_play_black, "W" => :sgf_play_white
+        "B" => :sgf_play_black, "W" => :sgf_play_white, "C" => :comment=,
+        "AB" => :sgf_setup_black, "AW" => :sgf_setup_white
       }
       
       def initialize debug_mode = false
