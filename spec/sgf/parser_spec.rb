@@ -88,6 +88,7 @@ module SGF
       @listener.game.board_size.should == 19
       @listener.game.handicap.should == 0
       @listener.game.komi.should == 5.5
+      @listener.game.played_on.should == "1999-07-28"
       @listener.game.white_player.should == 'White'
       @listener.game.black_player.should == 'Black'
     end
