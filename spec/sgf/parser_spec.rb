@@ -57,7 +57,7 @@ module SGF
   
   describe Parser, 'with SGF::Model::EventListener' do
     before :each do
-      @listener = SGF::Model::EventListener.new
+      @listener = SGF::Model::EventListener.new true
       @parser = Parser.new @listener
     end
     
