@@ -24,6 +24,7 @@ module SGF
     
     def event input
       @before_state = @state
+      @input = input
       transition = transitions[@state]
       return false unless transition
       

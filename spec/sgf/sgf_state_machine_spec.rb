@@ -52,6 +52,58 @@ module SGF
         @stm.state = SGFStateMachine::STATE_BEGIN
         @stm.event "("
       end
+      
+      it "Transition to node should call context.start_node" do
+        mock(@context).start_node
+        @stm.state = SGFStateMachine::STATE_GAME_BEGIN
+        @stm.event ";"
+      end
+      
+      it "Transition to variation begin should call context.start_variation" do
+        mock(@context).start_variation
+        @stm.state = SGFStateMachine::STATE_NODE
+        @stm.event "("
+      end
+      
+      it "Transition to prop name begin should call context.prop_name=" do
+        mock(@context).prop_name = "A"
+        @stm.state = SGFStateMachine::STATE_NODE
+        @stm.event "A"
+      end
+
+      it "Transition to prop name from prop name begin should append input to context.prop_name" do
+        mock(@context).prop_name { "A" }
+        mock(@context).prop_name = "AB"
+        @stm.state = SGFStateMachine::STATE_PROP_NAME_BEGIN
+        @stm.event "B"
+      end
+      
+      it "Transition to game variation end should call context.end_variation" do
+        mock(@context).end_variation
+        @stm.state = SGFStateMachine::STATE_VALUE_END
+        @stm.event ")"
+      end
+      
+      it "Transition to value should call context.prop_value=" do
+        mock(@context).prop_value = "A"
+        @stm.state = SGFStateMachine::STATE_VALUE_BEGIN
+        @stm.event "A"
+      end
+      
+      it "Transition to value from value should append input to context.prop_value" do
+        mock(@context).prop_value { "A" }
+        mock(@context).prop_value = "AB"
+        @stm.state = SGFStateMachine::STATE_VALUE
+        @stm.event "B"
+      end
+      
+      it "Transition to value end should call context.set_property" do
+        mock(@context).prop_name { "A" }
+        mock(@context).prop_value { "B" }
+        mock(@context).set_property "A", "B"
+        @stm.state = SGFStateMachine::STATE_VALUE
+        @stm.event "]"
+      end
     end
     
   end

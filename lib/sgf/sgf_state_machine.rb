@@ -34,12 +34,12 @@ module SGF
       stm.transition [STATE_NODE, STATE_VALUE_END],
                      /[a-zA-Z]/,  
                      STATE_PROP_NAME_BEGIN,
-                     lambda{ |stm| stm.context.prop_name = stm.context.input unless stm.context.nil? }
+                     lambda{ |stm| stm.context.prop_name = stm.input unless stm.context.nil? }
       
       stm.transition STATE_PROP_NAME_BEGIN,
                      /[a-zA-Z]/,  
                      STATE_PROP_NAME,
-                     lambda{ |stm| stm.context.prop_name += stm.context.input unless stm.context.nil? }
+                     lambda{ |stm| stm.context.prop_name += stm.input unless stm.context.nil? }
       
       stm.transition [STATE_PROP_NAME_BEGIN, STATE_PROP_NAME, STATE_VALUE_END],    
                      /\[/,        
@@ -48,12 +48,12 @@ module SGF
       stm.transition STATE_VALUE_BEGIN,  
                      /[^\]]/,
                      STATE_VALUE,
-                     lambda{ |stm| stm.context.prop_value = stm.context.input unless stm.context.nil? }
+                     lambda{ |stm| stm.context.prop_value = stm.input unless stm.context.nil? }
                        
       stm.transition STATE_VALUE,
                      /[^\]]/,
                      nil,
-                     lambda{ |stm| stm.context.prop_value += stm.context.input unless stm.context.nil? }
+                     lambda{ |stm| stm.context.prop_value += stm.input unless stm.context.nil? }
                        
       stm.transition STATE_VALUE,        
                      /\]/,        
