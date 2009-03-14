@@ -14,56 +14,68 @@ module SGF
     
     def create_state_machine context = nil
       stm = StateMachine.new(STATE_BEGIN)
-      stm.context = context
+      
+      unless context.nil?
+        stm.context = context
+        start_game = lambda{ |stm| stm.context.start_game }
+        start_node = lambda{ |stm| stm.context.start_node }
+        start_variation = lambda{ |stm| stm.context.start_variation }
+        store_input_in_buffer = lambda{ |stm| stm.buffer = stm.input }
+        append_input_to_buffer = lambda{ |stm| stm.buffer += stm.input }
+        set_property_name = lambda{ |stm| stm.context.property_name = stm.buffer }
+        set_property_value = lambda{ |stm| stm.context.property_value = stm.buffer }
+        end_variation = lambda{ |stm| stm.context.end_variation }
+      end
       
       stm.transition STATE_BEGIN,        
                      /\(/,        
                      STATE_GAME_BEGIN,
-                     lambda{ |stm| stm.context.start_game unless stm.context.nil? }
+                     start_game
       
       stm.transition [STATE_GAME_BEGIN, STATE_VAR_BEGIN, STATE_GAME_VAR_END, STATE_VALUE_END],   
                      /;/,
                      STATE_NODE,
-                     lambda{ |stm| stm.context.start_node unless stm.context.nil? }
+                     start_node
       
       stm.transition [STATE_NODE, STATE_GAME_VAR_END, STATE_VALUE_END],
                      /\(/,        
                      STATE_VAR_BEGIN,
-                     lambda{ |stm| stm.context.start_variation unless stm.context.nil? }
+                     start_variation
       
       stm.transition [STATE_NODE, STATE_VALUE_END],
                      /[a-zA-Z]/,  
                      STATE_PROP_NAME_BEGIN,
-                     lambda{ |stm| stm.context.prop_name = stm.input unless stm.context.nil? }
+                     store_input_in_buffer
       
       stm.transition STATE_PROP_NAME_BEGIN,
                      /[a-zA-Z]/,  
                      STATE_PROP_NAME,
-                     lambda{ |stm| stm.context.prop_name += stm.input unless stm.context.nil? }
+                     append_input_to_buffer
       
       stm.transition [STATE_PROP_NAME_BEGIN, STATE_PROP_NAME, STATE_VALUE_END],    
                      /\[/,        
-                     STATE_VALUE_BEGIN
+                     STATE_VALUE_BEGIN,
+                     set_property_name
                      
-      stm.transition STATE_VALUE_BEGIN,  
+      stm.transition STATE_VALUE_BEGIN,
                      /[^\]]/,
                      STATE_VALUE,
-                     lambda{ |stm| stm.context.prop_value = stm.input unless stm.context.nil? }
+                     store_input_in_buffer
                        
       stm.transition STATE_VALUE,
                      /[^\]]/,
                      nil,
-                     lambda{ |stm| stm.context.prop_value += stm.input unless stm.context.nil? }
+                     append_input_to_buffer
                        
       stm.transition STATE_VALUE,        
                      /\]/,        
                      STATE_VALUE_END,
-                     lambda{ |stm| stm.context.set_property(stm.context.prop_name, stm.context.prop_value) unless stm.context.nil? }
+                     set_property_value
     
       stm.transition [STATE_NODE, STATE_VALUE_END],
                      /\)/,        
                      STATE_GAME_VAR_END,
-                     lambda{ |stm| stm.context.end_variation unless stm.context.nil? }
+                     end_variation
 
       stm
     end

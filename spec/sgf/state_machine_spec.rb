@@ -38,11 +38,11 @@ module SGF
     end
     
     it "transition should invoke the lambda if triggered by an event" do
-      dummy = nil
       stm = StateMachine.new :start
-      stm.transition :start, /a/, :end, lambda{|stm| dummy = 1 }
-      stm.event 'a'
-      dummy.should == 1
+      stm.buffer = "123"
+      stm.transition :start, /4/, :end, lambda{|stm| stm.buffer += stm.input }
+      stm.event '4'
+      stm.buffer.should == "1234"
     end
     
   end

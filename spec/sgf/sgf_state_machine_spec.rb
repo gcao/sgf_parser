@@ -65,17 +65,17 @@ module SGF
         @stm.event "("
       end
       
-      it "Transition to prop name begin should call context.prop_name=" do
-        mock(@context).prop_name = "A"
+      it "Transition to prop name begin should set store input to buffer" do
         @stm.state = SGFStateMachine::STATE_NODE
         @stm.event "A"
+        @stm.buffer.should == "A"
       end
 
-      it "Transition to prop name from prop name begin should append input to context.prop_name" do
-        mock(@context).prop_name { "A" }
-        mock(@context).prop_name = "AB"
+      it "Transition to prop name from prop name begin should append input to buffer" do
+        @stm.buffer = "A"
         @stm.state = SGFStateMachine::STATE_PROP_NAME_BEGIN
         @stm.event "B"
+        @stm.buffer.should == "AB"
       end
       
       it "Transition to game variation end should call context.end_variation" do
@@ -84,23 +84,30 @@ module SGF
         @stm.event ")"
       end
       
-      it "Transition to value should call context.prop_value=" do
-        mock(@context).prop_value = "A"
+      it "Transition to value begin should call context.property_name= with buffer" do
+        mock(@context).property_name = "AB"
+        @stm.buffer = "AB"
+        @stm.state = SGFStateMachine::STATE_PROP_NAME
+        @stm.event "["
+      end
+      
+      it "Transition to value should store input to buffer" do
+        @stm.buffer = "AB"
         @stm.state = SGFStateMachine::STATE_VALUE_BEGIN
-        @stm.event "A"
+        @stm.event "V"
+        @stm.buffer.should == "V"
       end
       
-      it "Transition to value from value should append input to context.prop_value" do
-        mock(@context).prop_value { "A" }
-        mock(@context).prop_value = "AB"
+      it "Transition to value from value should append input to buffer" do
+        @stm.buffer = "Valu"
         @stm.state = SGFStateMachine::STATE_VALUE
-        @stm.event "B"
+        @stm.event "e"
+        @stm.buffer.should == "Value"
       end
       
-      it "Transition to value end should call context.set_property" do
-        mock(@context).prop_name { "A" }
-        mock(@context).prop_value { "B" }
-        mock(@context).set_property "A", "B"
+      it "Transition to value end should call context.property_value" do
+        mock(@context).property_value = "Value"
+        @stm.buffer = "Value"
         @stm.state = SGFStateMachine::STATE_VALUE
         @stm.event "]"
       end

@@ -2,7 +2,7 @@ module SGF
   class StateMachine
     attr_reader :start_state, :transitions
     attr_reader :before_state, :input
-    attr_accessor :state, :context
+    attr_accessor :state, :context, :buffer
     
     def initialize start_state
       @start_state = @state = start_state
