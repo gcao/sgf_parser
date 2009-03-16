@@ -3,7 +3,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 module SGF
   describe Parser, 'with DefaultEventListener' do
     before :each do
-      @listener = DefaultEventListener.new
+      @listener = DefaultEventListener.new true
       @parser = Parser.new @listener
     end
 
@@ -95,7 +95,7 @@ module SGF
       game.application.should == 'Cgoban 1.9.2'
       game.time_rule.should == '30:00(5x1:00)'
       game.root_node.type.should == SGF::Model::Constants::NODE_SETUP
-      game.root_node.comment.should == "guff plays A and adum tenukis to fill a 1-point ko. white to kill."
+      game.nodes[1].comment.should == "guff plays A and adum tenukis to fill a 1-point ko. white to kill."
     end
   end
 end

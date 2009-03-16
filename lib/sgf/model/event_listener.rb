@@ -21,6 +21,10 @@ module SGF
         @game ||= Game.new
       end
       
+      def node
+        @node ||= game.root_node
+      end
+      
       def start_game
         super
         
@@ -30,15 +34,26 @@ module SGF
       def start_node
         super
         
-        game.nodes << (@node = Node.new)
+        @node = Node.new
+        game.nodes << @node
+      end
+      
+      def property_name= name
+        super name
+        
+        @property_name = name
+      end
+      
+      def property_value= value
+        super value
+        
+        set_property @property_name, @property_value
       end
       
       def set_property name, value
-        super
-        
         return unless name
         name = name.strip.upcase
-        
+
         unless set_game_property(name, value)
           unless set_node_property(name, value)
             puts "WARNING: SGF property is not recognized(name=#{name}, value=#{value})"
@@ -49,20 +64,20 @@ module SGF
       private
       
       def set_game_property name, value
-        GAME_PROPERTY_MAPPINGS.each do |sgf_prop_name, game_method|
-          if name == sgf_prop_name
-            game.send(game_method, value.strip)
-            return true
-          end
+        game_method = GAME_PROPERTY_MAPPINGS[name]
+        
+        if game_method
+          game.send(game_method, value.strip)
+          true
         end
       end
 
       def set_node_property name, value
-        GAME_PROPERTY_MAPPINGS.each do |sgf_prop_name, node_method|
-          if name == sgf_prop_name
-            game.root_node.send(node_method, value.strip)
-            return true
-          end
+        node_method = NODE_PROPERTY_MAPPINGS[name]
+        
+        if node_method
+          node.send(node_method, value.strip)
+          true
         end
       end
     end

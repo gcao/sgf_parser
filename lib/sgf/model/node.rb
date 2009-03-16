@@ -38,6 +38,30 @@ module SGF
         @color = WHITE
         @move = position_to_array(position)
       end
+      
+      def to_s
+        to_sgf
+      end
+      
+      def to_sgf
+        raise 'INCOMPLETE'
+        result = ""
+        
+        if type == NODE_SETUP
+          unless black_moves.empty?
+          end
+          
+          unless white_moves.empty?
+          end
+          
+        else
+          result << (color == BLACK ? "B" : "W")
+          result << "[" << "" << "]"
+        end
+        
+        result << "C[" << comment << "]" unless comment.nil?
+        result
+      end
     end
   end
 end

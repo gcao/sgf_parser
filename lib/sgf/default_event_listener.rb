@@ -12,8 +12,12 @@ module SGF
       debug 'start_node'
     end
     
-    def set_property name, value
-      debug "set_property('#{name}', '#{value}')"
+    def property_name= name
+      debug "property_name = '#{name}'"
+    end
+    
+    def property_value= value
+      debug "property_value = '#{value}'"
     end
     
     def start_variation
