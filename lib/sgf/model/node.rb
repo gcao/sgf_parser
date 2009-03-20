@@ -20,28 +20,28 @@ module SGF
         @white_moves ||= []
       end
       
-      def sgf_setup_black position
-        black_moves << position_to_array(position)
+      def sgf_setup_black input
+        black_moves << to_position_array(input)
       end
       
-      def sgf_setup_white position
-        white_moves << position_to_array(position)
+      def sgf_setup_white input
+        white_moves << to_position_array(input)
       end
       
-      def sgf_play_black position
+      def sgf_play_black input
         @type = NODE_MOVE
         @color = BLACK
-        @move = position_to_array(position)
+        @move = to_position_array(input)
       end
       
-      def sgf_play_white position
+      def sgf_play_white input
         @type = NODE_MOVE
         @color = WHITE
-        @move = position_to_array(position)
+        @move = to_position_array(input)
       end
       
       def sgf_label input
-        @labels << string_to_label(input)
+        @labels << to_label(input)
       end
       
       def to_s
