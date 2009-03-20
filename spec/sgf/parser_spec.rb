@@ -3,8 +3,8 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 module SGF
   describe Parser, 'with DefaultEventListener' do
     before :each do
-      @listener = DefaultEventListener.new true
-      @parser = Parser.new @listener
+      @listener = DefaultEventListener.new
+      @parser   = Parser.new @listener
     end
 
     {'nil' => nil, '' => '', '  ' => '  '}.each do |name, value|
@@ -28,19 +28,24 @@ module SGF
       @parser.parse("(;")
     end
     
-    it "should call end_game" do
-      mock(@listener).end_game
+    it "should call end_variation" do
+      mock(@listener).end_variation
       @parser.parse("(;)")
     end
     
-    it "should call set_property with name and value" do
-      mock(@listener).set_property('GN', 'a game')
+    it "should call property_name= with name" do
+      mock(@listener).property_name = 'GN'
+      @parser.parse("(;GN[)")
+    end
+    
+    it "should call property_value= with value" do
+      mock(@listener).property_value = 'a game'
       @parser.parse("(;GN[a game])")
     end
     
-    it "should call set_property with same name and different values" do
-      mock(@listener).set_property('AB', 'DB')
-      mock(@listener).set_property('AB', 'KS')
+    it "should call property_value= for each value" do
+      mock(@listener).property_value = 'DB'
+      mock(@listener).property_value = 'KS'
       @parser.parse("(;AB[DB][KS])")
     end
     
@@ -57,8 +62,8 @@ module SGF
   
   describe Parser, 'with SGF::Model::EventListener' do
     before :each do
-      @listener = SGF::Model::EventListener.new true
-      @parser = Parser.new @listener
+      @listener = SGF::Model::EventListener.new
+      @parser   = Parser.new @listener
     end
     
     it "should set game name" do

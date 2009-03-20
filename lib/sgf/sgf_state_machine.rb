@@ -15,18 +15,16 @@ module SGF
     def create_state_machine context = nil
       stm = StateMachine.new(STATE_BEGIN)
       
-      unless context.nil?
-        stm.context = context
-        start_game = lambda{ |stm| stm.context.start_game }
-        start_node = lambda{ |stm| stm.context.start_node }
-        start_variation = lambda{ |stm| stm.context.start_variation }
-        store_input_in_buffer = lambda{ |stm| stm.buffer = stm.input }
-        append_input_to_buffer = lambda{ |stm| stm.buffer += stm.input }
-        set_property_name = lambda{ |stm| stm.context.property_name = stm.buffer }
-        set_property_value = lambda{ |stm| stm.context.property_value = stm.buffer }
-        end_variation = lambda{ |stm| stm.context.end_variation }
-      end
-      
+      stm.context            = context
+      start_game             = lambda{ |stm| return if stm.context.nil?; stm.context.start_game }
+      start_node             = lambda{ |stm| return if stm.context.nil?; stm.context.start_node }
+      start_variation        = lambda{ |stm| return if stm.context.nil?; stm.context.start_variation }
+      store_input_in_buffer  = lambda{ |stm| return if stm.context.nil?; stm.buffer = stm.input }
+      append_input_to_buffer = lambda{ |stm| return if stm.context.nil?; stm.buffer += stm.input }
+      set_property_name      = lambda{ |stm| return if stm.context.nil?; stm.context.property_name = stm.buffer }
+      set_property_value     = lambda{ |stm| return if stm.context.nil?; stm.context.property_value = stm.buffer }
+      end_variation          = lambda{ |stm| return if stm.context.nil?; stm.context.end_variation }
+
       stm.transition STATE_BEGIN,        
                      /\(/,        
                      STATE_GAME_BEGIN,
@@ -52,10 +50,14 @@ module SGF
                      STATE_PROP_NAME,
                      append_input_to_buffer
       
-      stm.transition [STATE_PROP_NAME_BEGIN, STATE_PROP_NAME, STATE_VALUE_END],    
+      stm.transition [STATE_PROP_NAME_BEGIN, STATE_PROP_NAME],    
                      /\[/,        
                      STATE_VALUE_BEGIN,
                      set_property_name
+        
+      stm.transition STATE_VALUE_END,
+                     /\[/,        
+                     STATE_VALUE_BEGIN
                      
       stm.transition STATE_VALUE_BEGIN,
                      /[^\]]/,

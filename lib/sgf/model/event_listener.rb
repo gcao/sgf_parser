@@ -47,12 +47,13 @@ module SGF
       def property_value= value
         super value
         
-        set_property @property_name, @property_value
+        set_property @property_name, value
       end
       
       def set_property name, value
         return unless name
         name = name.strip.upcase
+        value.strip! unless value.nil?
 
         unless set_game_property(name, value)
           unless set_node_property(name, value)
@@ -67,7 +68,7 @@ module SGF
         game_method = GAME_PROPERTY_MAPPINGS[name]
         
         if game_method
-          game.send(game_method, value.strip)
+          game.send(game_method, value)
           true
         end
       end
@@ -76,7 +77,7 @@ module SGF
         node_method = NODE_PROPERTY_MAPPINGS[name]
         
         if node_method
-          node.send(node_method, value.strip)
+          node.send(node_method, value)
           true
         end
       end
