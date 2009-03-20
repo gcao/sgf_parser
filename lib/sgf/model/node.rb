@@ -4,11 +4,12 @@ module SGF
       include Constants
       include SGF::SGFHelper
       
-      attr_reader :type, :color, :move, :black_moves, :white_moves
+      attr_reader :type, :color, :move, :black_moves, :white_moves, :labels
       attr_accessor :comment
       
       def initialize
         @type = NODE_SETUP
+        @labels = []
       end
       
       def black_moves
@@ -37,6 +38,10 @@ module SGF
         @type = NODE_MOVE
         @color = WHITE
         @move = position_to_array(position)
+      end
+      
+      def sgf_label input
+        @labels << string_to_label(input)
       end
       
       def to_s

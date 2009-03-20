@@ -1,6 +1,9 @@
 module SGF
   module Model
     class EventListener < SGF::DefaultEventListener
+      include SGF::SGFHelper
+      
+      attr_reader :node
       
       GAME_PROPERTY_MAPPINGS = {
         'GN' => :name=, 'RU' => :rule=, 'SZ' => :board_size=, 'HA' => :handicap=, 'KM' => :komi=,
@@ -10,7 +13,7 @@ module SGF
       
       NODE_PROPERTY_MAPPINGS = {
         "B" => :sgf_play_black, "W" => :sgf_play_white, "C" => :comment=,
-        "AB" => :sgf_setup_black, "AW" => :sgf_setup_white
+        "AB" => :sgf_setup_black, "AW" => :sgf_setup_white, "LB" => :sgf_label
       }
       
       def initialize debug_mode = false
@@ -50,19 +53,18 @@ module SGF
         set_property @property_name, value
       end
       
+      private
+      
       def set_property name, value
         return unless name
         name = name.strip.upcase
         value.strip! unless value.nil?
 
-        unless set_game_property(name, value)
-          unless set_node_property(name, value)
-            puts "WARNING: SGF property is not recognized(name=#{name}, value=#{value})"
-          end
-        end
+        return if set_game_property(name, value)
+        return if set_node_property(name, value)
+        
+        puts "WARNING: SGF property is not recognized(name=#{name}, value=#{value})"
       end
-      
-      private
       
       def set_game_property name, value
         game_method = GAME_PROPERTY_MAPPINGS[name]
