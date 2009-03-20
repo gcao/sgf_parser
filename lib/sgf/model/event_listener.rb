@@ -6,14 +6,15 @@ module SGF
       attr_reader :node
       
       GAME_PROPERTY_MAPPINGS = {
-        'GN' => :name=, 'RU' => :rule=, 'SZ' => :board_size=, 'HA' => :handicap=, 'KM' => :komi=,
+        'GM' => :game_type=, 'GN' => :name=, 'RU' => :rule=, 'SZ' => :board_size=, 'HA' => :handicap=, 'KM' => :komi=,
         'PW' => :white_player=, 'PB' => :black_player=, 'DT' => :played_on=, 'TM' => :time_rule=,
         'SY' => :application=
       }
       
       NODE_PROPERTY_MAPPINGS = {
         "B" => :sgf_play_black, "W" => :sgf_play_white, "C" => :comment=,
-        "AB" => :sgf_setup_black, "AW" => :sgf_setup_white, "LB" => :sgf_label
+        "AB" => :sgf_setup_black, "AW" => :sgf_setup_white, "LB" => :sgf_label,
+        "PL" => :whose_turn=
       }
       
       def initialize debug_mode = false

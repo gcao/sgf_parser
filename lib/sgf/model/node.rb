@@ -5,11 +5,16 @@ module SGF
       include SGF::SGFHelper
       
       attr_reader :type, :color, :move, :black_moves, :white_moves, :labels
-      attr_accessor :comment
+      attr_accessor :comment, :whose_turn
       
       def initialize
-        @type = NODE_SETUP
-        @labels = []
+        @type       = NODE_SETUP
+        @labels     = []
+        @whose_turn = BLACK
+      end
+      
+      def whose_turn= input
+        @whose_turn = input.to_i
       end
       
       def black_moves
@@ -29,15 +34,15 @@ module SGF
       end
       
       def sgf_play_black input
-        @type = NODE_MOVE
+        @type  = NODE_MOVE
         @color = BLACK
-        @move = to_position_array(input)
+        @move  = to_position_array(input)
       end
       
       def sgf_play_white input
-        @type = NODE_MOVE
+        @type  = NODE_MOVE
         @color = WHITE
-        @move = to_position_array(input)
+        @move  = to_position_array(input)
       end
       
       def sgf_label input
