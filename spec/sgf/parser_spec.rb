@@ -100,9 +100,9 @@ module SGF
       game.application.should == 'Cgoban 1.9.2'
       game.time_rule.should == '30:00(5x1:00)'
       
-      game.root_node.type.should == SGF::Model::Constants::NODE_SETUP
+      game.root_node.node_type.should == SGF::Model::Constants::NODE_SETUP
       
-      game.nodes[1].type.should == SGF::Model::Constants::NODE_SETUP
+      game.nodes[1].node_type.should == SGF::Model::Constants::NODE_SETUP
       game.nodes[1].comment.should == "guff plays A and adum tenukis to fill a 1-point ko. white to kill."
       game.nodes[1].black_moves.should include([3, 0])
       game.nodes[1].black_moves.should include([3, 1])
@@ -110,12 +110,12 @@ module SGF
       game.nodes[1].white_moves.should include([4, 1])
       game.nodes[1].labels[0].should == SGF::Model::Label.new([1, 3], "A")
       
-      game.nodes[2].type.should == SGF::Model::Constants::NODE_MOVE
+      game.nodes[2].node_type.should == SGF::Model::Constants::NODE_MOVE
       game.nodes[2].color.should == SGF::Model::Constants::WHITE
       game.nodes[2].move.should == [1, 2]
       
       
-      game.nodes[3].type.should == SGF::Model::Constants::NODE_MOVE
+      game.nodes[3].node_type.should == SGF::Model::Constants::NODE_MOVE
       game.nodes[3].color.should == SGF::Model::Constants::BLACK
       game.nodes[3].move.should == [1, 1]
     end

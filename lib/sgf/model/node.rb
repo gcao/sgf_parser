@@ -4,11 +4,11 @@ module SGF
       include Constants
       include SGF::SGFHelper
       
-      attr_reader :type, :color, :move, :black_moves, :white_moves, :labels
+      attr_reader :node_type, :color, :move, :black_moves, :white_moves, :labels
       attr_accessor :comment, :whose_turn
       
       def initialize
-        @type       = NODE_SETUP
+        @node_type  = NODE_SETUP
         @labels     = []
         @whose_turn = BLACK
       end
@@ -34,43 +34,19 @@ module SGF
       end
       
       def sgf_play_black input
-        @type  = NODE_MOVE
-        @color = BLACK
-        @move  = to_position_array(input)
+        @node_type = NODE_MOVE
+        @color     = BLACK
+        @move      = to_position_array(input)
       end
       
       def sgf_play_white input
-        @type  = NODE_MOVE
-        @color = WHITE
-        @move  = to_position_array(input)
+        @node_type = NODE_MOVE
+        @color     = WHITE
+        @move      = to_position_array(input)
       end
       
       def sgf_label input
         @labels << to_label(input)
-      end
-      
-      def to_s
-        to_sgf
-      end
-      
-      def to_sgf
-        raise 'INCOMPLETE'
-        result = ""
-        
-        if type == NODE_SETUP
-          unless black_moves.empty?
-          end
-          
-          unless white_moves.empty?
-          end
-          
-        else
-          result << (color == BLACK ? "B" : "W")
-          result << "[" << "" << "]"
-        end
-        
-        result << "C[" << comment << "]" unless comment.nil?
-        result
       end
     end
   end

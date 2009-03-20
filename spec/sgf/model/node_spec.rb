@@ -18,7 +18,7 @@ module SGF
       it "sgf_play_black should set node type to MOVE and save move information" do
         node = Node.new
         node.sgf_play_black "AB"
-        node.type.should == Constants::NODE_MOVE
+        node.node_type.should == Constants::NODE_MOVE
         node.color.should == Constants::BLACK
         node.move.should == [0, 1]
       end
@@ -26,7 +26,7 @@ module SGF
       it "sgf_play_white should set node type to MOVE and save move information" do
         node = Node.new
         node.sgf_play_white "AB"
-        node.type.should == Constants::NODE_MOVE
+        node.node_type.should == Constants::NODE_MOVE
         node.color.should == Constants::WHITE
         node.move.should == [0, 1]
       end
