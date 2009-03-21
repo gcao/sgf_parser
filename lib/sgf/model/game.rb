@@ -16,10 +16,10 @@ module SGF
         @nodes       = []
       end
       
-      def game_type=(value); @game_type = value.to_i; end
+      def game_type=(value);  @game_type  = value.to_i; end
       def board_size=(value); @board_size = value.to_i; end
-      def handicap=(value); @handicap = value.to_i; end
-      def komi=(value); @komi = value.to_f; end
+      def handicap=(value);   @handicap   = value.to_i; end
+      def komi=(value);       @komi       = value.to_f; end
 
       def root_node
         @nodes << Node.new if @nodes.empty?

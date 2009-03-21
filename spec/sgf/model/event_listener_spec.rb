@@ -25,10 +25,20 @@ module SGF
         game1.should_not == game2
       end
       
+      it "start_variation should create a new variation" do
+        pending "INCOMPLETE"
+        @listener.start_game
+        @listener.start_node
+        node = @listener.node
+        @listener.start_variation
+        @listener.variations.should == [node]
+      end
+      
       EventListener::GAME_PROPERTY_MAPPINGS.each do |prop_name, attr_name|
-        it "set_property with property name as #{prop_name} should set #{attr_name} on game" do
+        it "call property_name=#{prop_name} and property_value=something should set #{attr_name} on game" do
           mock(@listener.game).send(attr_name, '123')
-          @listener.set_property(prop_name, ' 123 ')
+          @listener.property_name = prop_name
+          @listener.property_value = '123'
         end
       end
 
@@ -37,9 +47,10 @@ module SGF
         @listener.game.nodes.size.should == 1
       end
       
-      it "set_property('C', ...) should add comment to node" do
+      it "property_name='C' and property_value=something should add comment to node" do
         @listener.start_node
-        @listener.set_property('C', 'comment')
+        @listener.property_name = "C"
+        @listener.property_value = "comment"
         @listener.game.root_node.comment.should == 'comment'
       end
       

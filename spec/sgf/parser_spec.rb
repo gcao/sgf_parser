@@ -66,7 +66,7 @@ module SGF
       @parser   = Parser.new @listener
     end
     
-    it "should set game name" do
+    it "should parse a complete game" do
       @parser.parse <<-INPUT
       (;GM[1]FF[3]
       RU[Japanese]SZ[19]HA[0]KM[5.5]
@@ -113,7 +113,6 @@ module SGF
       game.nodes[2].node_type.should == SGF::Model::Constants::NODE_MOVE
       game.nodes[2].color.should == SGF::Model::Constants::WHITE
       game.nodes[2].move.should == [1, 2]
-      
       
       game.nodes[3].node_type.should == SGF::Model::Constants::NODE_MOVE
       game.nodes[3].color.should == SGF::Model::Constants::BLACK

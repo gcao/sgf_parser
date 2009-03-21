@@ -35,6 +35,14 @@ module SGF
         @game = Game.new
       end
       
+      def start_variation
+        super
+      end
+      
+      def end_variation
+        super
+      end
+      
       def start_node
         super
         
