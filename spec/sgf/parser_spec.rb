@@ -100,23 +100,30 @@ module SGF
       game.application.should == 'Cgoban 1.9.2'
       game.time_rule.should == '30:00(5x1:00)'
       
-      game.root_node.node_type.should == SGF::Model::Constants::NODE_SETUP
+      root_node = game.root_node
+      root_node.node_type.should == SGF::Model::Constants::NODE_SETUP
       
-      game.nodes[1].node_type.should == SGF::Model::Constants::NODE_SETUP
-      game.nodes[1].comment.should == "guff plays A and adum tenukis to fill a 1-point ko. white to kill."
-      game.nodes[1].black_moves.should include([3, 0])
-      game.nodes[1].black_moves.should include([3, 1])
-      game.nodes[1].white_moves.should include([4, 0])
-      game.nodes[1].white_moves.should include([4, 1])
-      game.nodes[1].labels[0].should == SGF::Model::Label.new([1, 3], "A")
+      node2 = root_node.child
+      node2.node_type.should == SGF::Model::Constants::NODE_SETUP
+      node2.trunk?.should be_true
+      node2.comment.should == "guff plays A and adum tenukis to fill a 1-point ko. white to kill."
+      node2.black_moves.should include([3, 0])
+      node2.black_moves.should include([3, 1])
+      node2.white_moves.should include([4, 0])
+      node2.white_moves.should include([4, 1])
+      node2.labels[0].should == SGF::Model::Label.new([1, 3], "A")
+
+      var1_root = node2.children[0]
+      var1_root.trunk?.should be_false
+      var1_root.variation_root?.should be_true
+      var1_root.color.should == SGF::Model::Constants::WHITE
+      var1_root.move.should == [1, 2]
       
-      game.nodes[2].node_type.should == SGF::Model::Constants::NODE_MOVE
-      game.nodes[2].color.should == SGF::Model::Constants::WHITE
-      game.nodes[2].move.should == [1, 2]
-      
-      game.nodes[3].node_type.should == SGF::Model::Constants::NODE_MOVE
-      game.nodes[3].color.should == SGF::Model::Constants::BLACK
-      game.nodes[3].move.should == [1, 1]
+      var1_node2 = var1_root.child
+      var1_node2.trunk?.should be_false
+      var1_node2.variation_root?.should_not be_true
+      var1_node2.color.should == SGF::Model::Constants::BLACK
+      var1_node2.move.should == [1, 1]
     end
   end
 end

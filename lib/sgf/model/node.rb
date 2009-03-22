@@ -5,12 +5,19 @@ module SGF
       include SGF::SGFHelper
       
       attr_reader :node_type, :color, :move, :black_moves, :white_moves, :labels
+      attr_reader :parent, :children
       attr_accessor :comment, :whose_turn
       
-      def initialize
+      def initialize parent = nil
+        @parent     = parent
         @node_type  = NODE_SETUP
         @labels     = []
         @whose_turn = BLACK
+        @trunk      = true
+        if parent
+          @trunk = parent.trunk?
+          @parent.children << self
+        end
       end
       
       def whose_turn= input
@@ -23,6 +30,35 @@ module SGF
       
       def white_moves
         @white_moves ||= []
+      end
+      
+      def children
+        @children ||= []
+      end
+      
+      def child
+        @children.first
+      end
+      
+      def root?
+        @parent.nil?
+      end
+      
+      def trunk?
+        @trunk
+      end
+      
+      def last?
+        @children.nil? or @children.empty?
+      end
+      
+      def variation_root= value
+        @variation_root = value
+        @trunk = false if value
+      end
+      
+      def variation_root?
+        @variation_root
       end
       
       def sgf_setup_black input

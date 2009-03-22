@@ -25,13 +25,23 @@ module SGF
         game1.should_not == game2
       end
       
-      it "start_variation should create a new variation" do
-        pending "INCOMPLETE"
+      it "start_variation should create a new node as variation root" do
         @listener.start_game
         @listener.start_node
         node = @listener.node
         @listener.start_variation
-        @listener.variations.should == [node]
+        @listener.node.should_not == node
+        @listener.node.variation_root?.should be_true
+      end
+      
+      it "end_variation should set current node as parent of current variation's root" do
+        @listener.start_game
+        @listener.start_node
+        node = @listener.node
+        @listener.start_variation
+        @listener.node.should_not == node
+        @listener.end_variation
+        @listener.node.should == node
       end
       
       EventListener::GAME_PROPERTY_MAPPINGS.each do |prop_name, attr_name|
@@ -42,9 +52,18 @@ module SGF
         end
       end
 
-      it "should create a node on start_node" do
+      it "should set node as game's root node on first call to start_node" do
         @listener.start_node
-        @listener.game.nodes.size.should == 1
+        @listener.node.should == @listener.game.root_node
+      end
+      
+      it "should create child node on current node when call start_node" do
+        @listener.start_node
+        node = @listener.node
+        @listener.start_node
+        @listener.node.should_not == node
+        @listener.node.parent.should == node
+        node.children.should == [@listener.node]
       end
       
       it "property_name='C' and property_value=something should add comment to node" do

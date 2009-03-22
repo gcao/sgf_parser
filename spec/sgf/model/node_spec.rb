@@ -30,6 +30,13 @@ module SGF
         node.color.should == Constants::WHITE
         node.move.should == [0, 1]
       end
+      
+      it "child returns first child" do
+        node = Node.new
+        first_child = Node.new(node)
+        second_child = Node.new(node)
+        node.child.should == first_child
+      end
     end
   end
 end

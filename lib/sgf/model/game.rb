@@ -4,7 +4,6 @@ module SGF
       include Constants
       include SGF::SGFHelper
       
-      attr_reader :nodes
       attr_accessor :game_type, :name, :rule, :board_size, :handicap, :komi, :black_player, :white_player,
                     :played_on, :time_rule, :application
 
@@ -13,7 +12,6 @@ module SGF
         @board_size  = DEFAULT_BOARD_SIZE
         @handicap    = 0
         @komi        = DEFAULT_KOMI
-        @nodes       = []
       end
       
       def game_type=(value);  @game_type  = value.to_i; end
@@ -22,8 +20,7 @@ module SGF
       def komi=(value);       @komi       = value.to_f; end
 
       def root_node
-        @nodes << Node.new if @nodes.empty?
-        @nodes[0]
+        @root_node ||= Node.new(nil)
       end
       
     end

@@ -26,7 +26,7 @@ module SGF
       end
       
       def node
-        @node ||= game.root_node
+        @node
       end
       
       def start_game
@@ -37,17 +37,21 @@ module SGF
       
       def start_variation
         super
+        
+        @node = Node.new(@node)
+        @node.variation_root = true
       end
       
       def end_variation
         super
+        
+        @node = find_variation_root(@node).parent
       end
       
       def start_node
         super
         
-        @node = Node.new
-        game.nodes << @node
+        @node = @node.nil? ? game.root_node : Node.new(@node)
       end
       
       def property_name= name
@@ -63,6 +67,13 @@ module SGF
       end
       
       private
+      
+      def find_variation_root node
+        while not node.variation_root?
+          node = node.parent
+        end
+        node
+      end
       
       def set_property name, value
         return unless name

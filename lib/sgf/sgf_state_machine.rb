@@ -30,10 +30,14 @@ module SGF
                      STATE_GAME_BEGIN,
                      start_game
       
-      stm.transition [STATE_GAME_BEGIN, STATE_VAR_BEGIN, STATE_GAME_VAR_END, STATE_VALUE_END],   
+      stm.transition [STATE_GAME_BEGIN, STATE_GAME_VAR_END, STATE_VALUE_END],   
                      /;/,
                      STATE_NODE,
                      start_node
+      
+      stm.transition STATE_VAR_BEGIN,
+                     /;/,
+                     STATE_NODE
       
       stm.transition [STATE_NODE, STATE_GAME_VAR_END, STATE_VALUE_END],
                      /\(/,        
