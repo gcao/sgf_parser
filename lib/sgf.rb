@@ -2,6 +2,7 @@ require 'sgf/state_machine'
 require 'sgf/sgf_state_machine'
 require 'sgf/default_event_listener'
 require 'sgf/parser'
+require 'sgf/parse_error'
 require 'sgf/sgf_helper'
 
 require 'sgf/model/constants'

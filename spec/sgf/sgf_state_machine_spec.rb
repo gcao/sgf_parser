@@ -39,6 +39,17 @@ module SGF
           @stm.state.should == state_after
         end
       end
+      
+      [
+        [SGFStateMachine::STATE_BEGIN, 'A']
+      ].each do |state_before, input|
+        it "should raise error for '#{state_before}' + '#{input}'" do
+          @stm.state = state_before
+          lambda {
+            @stm.event input
+          }.should raise_error
+        end
+      end
     end
   
     describe "with context" do

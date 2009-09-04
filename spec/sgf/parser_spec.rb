@@ -91,6 +91,12 @@ module SGF
       game.name.should == 'White (W) vs. Black (B)'
     end
     
+    it "should raise error on invalid input" do
+      lambda {
+        @parser.parse("123")
+      }.should raise_error
+    end
+    
     it "should parse a complete game" do
       @parser.parse <<-INPUT
       (;GM[1]FF[3]

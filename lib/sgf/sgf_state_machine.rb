@@ -11,11 +11,12 @@ module SGF
     STATE_VALUE_BEGIN     = :value_begin      
     STATE_VALUE           = :value            
     STATE_VALUE_END       = :value_end
+    STATE_INVALID         = :invalid
     
     def create_state_machine context = nil
-      stm = StateMachine.new(STATE_BEGIN)
-      
-      stm.context            = context
+      stm         = StateMachine.new(STATE_BEGIN)
+      stm.context = context
+
       start_game             = lambda{ |stm| return if stm.context.nil?; stm.context.start_game }
       start_node             = lambda{ |stm| return if stm.context.nil?; stm.context.start_node }
       start_variation        = lambda{ |stm| return if stm.context.nil?; stm.context.start_variation }
@@ -24,11 +25,17 @@ module SGF
       set_property_name      = lambda{ |stm| return if stm.context.nil?; stm.context.property_name = stm.buffer }
       set_property_value     = lambda{ |stm| return if stm.context.nil?; stm.context.property_value = stm.buffer }
       end_variation          = lambda{ |stm| return if stm.context.nil?; stm.context.end_variation }
+      report_error           = lambda{ |stm| raise ParseError.new('SGF Error near "' + stm.input + '"') }
 
       stm.transition STATE_BEGIN,        
                      /\(/,        
                      STATE_GAME_BEGIN,
                      start_game
+                     
+      stm.transition STATE_BEGIN,        
+                     /[^\s]/, 
+                     STATE_INVALID,
+                     report_error
       
       stm.transition [STATE_GAME_BEGIN, STATE_GAME_VAR_END, STATE_VALUE_END],   
                      /;/,
