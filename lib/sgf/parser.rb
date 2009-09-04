@@ -5,6 +5,7 @@ module SGF
     attr_reader :event_listener
     
     def initialize event_listener
+      @event_listener = event_listener
       @stm = create_state_machine event_listener
     end
     
@@ -15,6 +16,26 @@ module SGF
         
       0.upto(input.size - 1) do |i|
         @stm.event(input[i,1])
+      end
+    end
+    
+    def parse_file filename
+      File.open(filename) do |f|
+        parse f.readlines.join
+      end
+    end
+    
+    class << self
+      def parse input, debug = false
+        parser = SGF::Parser.new(SGF::Model::EventListener.new(debug))
+        parser.parse input
+        parser.event_listener.game
+      end
+    
+      def parse_file filename, debug = false
+        parser = SGF::Parser.new(SGF::Model::EventListener.new(debug))
+        parser.parse_file filename
+        parser.event_listener.game
       end
     end
   end

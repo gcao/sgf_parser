@@ -25,10 +25,6 @@ module SGF
         @game ||= Game.new
       end
       
-      def node
-        @node
-      end
-      
       def start_game
         super
         
@@ -70,6 +66,8 @@ module SGF
       
       def find_variation_root node
         while not node.variation_root?
+          return node if node.parent.nil?
+          
           node = node.parent
         end
         node

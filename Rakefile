@@ -6,7 +6,7 @@ require 'spec/rake/spectask'
 
 GEM = "sgf_parser"
 GEM_VERSION = "0.1.0"
-AUTHOR = "Jean-François Menon, Guoliang Cao"
+AUTHOR = "Guoliang Cao"
 EMAIL = "cao@daoqigame.com"
 HOMEPAGE = "http://gcao.github.com"
 SUMMARY = "A SGF parser gem"

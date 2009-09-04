@@ -66,6 +66,31 @@ module SGF
       @parser   = Parser.new @listener
     end
     
+    it "should parse game in file" do
+      @parser.parse_file File.expand_path(File.dirname(__FILE__) + '/../example.sgf')
+      game = @listener.game
+      game.name.should == 'White (W) vs. Black (B)'
+      game.rule.should == 'Japanese'
+      game.board_size.should == 19
+      game.handicap.should == 0
+      game.komi.should == 5.5
+      game.played_on.should == "1999-07-28"
+      game.white_player.should == 'White'
+      game.black_player.should == 'Black'
+      game.application.should == 'Cgoban 1.9.2'
+      game.time_rule.should == '30:00(5x1:00)'
+    end
+    
+    it "should parse game without moves" do
+      @parser.parse <<-INPUT
+      (;GM[1]FF[3]
+      GN[White (W) vs. Black (B)];
+      )
+      INPUT
+      game = @listener.game
+      game.name.should == 'White (W) vs. Black (B)'
+    end
+    
     it "should parse a complete game" do
       @parser.parse <<-INPUT
       (;GM[1]FF[3]
@@ -124,6 +149,35 @@ module SGF
       var1_node2.variation_root?.should_not be_true
       var1_node2.color.should == SGF::Model::Constants::BLACK
       var1_node2.move.should == [1, 1]
+    end
+  end
+  
+  describe "class methods" do
+    it "parse should take a String and parse it and return the game" do
+      game = SGF::Parser.parse <<-INPUT
+      (;GM[1]FF[3]
+      GN[White (W) vs. Black (B)];
+      )
+      INPUT
+      game.name.should == 'White (W) vs. Black (B)'
+    end
+    
+    it "parse should pass debug parameter to event listener" do
+      event_listener = SGF::Model::EventListener.new(false)
+      mock(SGF::Model::EventListener).new(true) {event_listener}
+      SGF::Parser.parse "(;)", true
+    end
+
+    it "parse_file should take a sgf file and parse it and return the game" do
+      game = SGF::Parser.parse_file File.expand_path(File.dirname(__FILE__) + '/../example.sgf')
+      game.name.should == 'White (W) vs. Black (B)'
+    end
+
+    it "parse_file should pass debug parameter to event listener" do
+      event_listener = SGF::Model::EventListener.new(false)
+      mock(SGF::Model::EventListener).new(true) {event_listener}
+      game = SGF::Parser.parse_file(File.expand_path(File.dirname(__FILE__) + '/../example.sgf'), true)
+      game.name.should == 'White (W) vs. Black (B)'
     end
   end
 end
