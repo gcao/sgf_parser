@@ -8,7 +8,7 @@ module SGF
       GAME_PROPERTY_MAPPINGS = {
         'GM' => :game_type=, 'GN' => :name=, 'RU' => :rule=, 'SZ' => :board_size=, 'HA' => :handicap=, 'KM' => :komi=,
         'PW' => :white_player=, 'PB' => :black_player=, 'DT' => :played_on=, 'TM' => :time_rule=,
-        'SY' => :application=
+        'SY' => :program=, 'RE' => :result=
       }
       
       NODE_PROPERTY_MAPPINGS = {

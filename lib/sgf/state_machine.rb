@@ -1,5 +1,7 @@
 module SGF
   class StateMachine
+    include Debugger
+
     attr_reader :start_state, :transitions
     attr_reader :before_state, :input
     attr_accessor :state, :context, :buffer
@@ -17,19 +19,20 @@ module SGF
         return
       end
       
-      transition = @transitions[before_state]
+      transition = transitions[before_state]
       transitions[before_state] = transition = [] unless transition
       transition << [event_pattern, after_state, callback]
     end
     
     def event input
+      debug "'#{@state}' + '#{input}'"
       @before_state = @state
       @input = input
       transition = transitions[@state]
       return false unless transition
       
       found = transition.find do |item|
-        input =~ item[0]
+        (input.nil? and item[0].nil?) or input =~ item[0]
       end
       
       if found
@@ -39,6 +42,10 @@ module SGF
       else
         false
       end
+    end
+    
+    def end
+      event nil
     end
   end
 end

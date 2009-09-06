@@ -5,7 +5,7 @@ module SGF
       include SGF::SGFHelper
       
       attr_accessor :game_type, :name, :rule, :board_size, :handicap, :komi, :black_player, :white_player,
-                    :played_on, :time_rule, :application
+                    :played_on, :time_rule, :program, :result
 
       def initialize
         @game_type   = WEIQI

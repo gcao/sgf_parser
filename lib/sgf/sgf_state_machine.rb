@@ -31,12 +31,7 @@ module SGF
                      /\(/,        
                      STATE_GAME_BEGIN,
                      start_game
-                     
-      stm.transition STATE_BEGIN,        
-                     /[^\s]/, 
-                     STATE_INVALID,
-                     report_error
-      
+                           
       stm.transition [STATE_GAME_BEGIN, STATE_GAME_VAR_END, STATE_VALUE_END],   
                      /;/,
                      STATE_NODE,
@@ -89,6 +84,11 @@ module SGF
                      /\)/,        
                      STATE_GAME_VAR_END,
                      end_variation
+
+      stm.transition [STATE_BEGIN, STATE_GAME_BEGIN],
+                     /[^\s]/, 
+                     STATE_INVALID,
+                     report_error
 
       stm
     end

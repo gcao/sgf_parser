@@ -77,7 +77,7 @@ module SGF
       game.played_on.should == "1999-07-28"
       game.white_player.should == 'White'
       game.black_player.should == 'Black'
-      game.application.should == 'Cgoban 1.9.2'
+      game.program.should == 'Cgoban 1.9.2'
       game.time_rule.should == '30:00(5x1:00)'
     end
     
@@ -92,9 +92,7 @@ module SGF
     end
     
     it "should raise error on invalid input" do
-      lambda {
-        @parser.parse("123")
-      }.should raise_error
+      lambda { @parser.parse("123") }.should raise_error
     end
     
     it "should parse a complete game" do
@@ -105,6 +103,7 @@ module SGF
       PB[Black]
       GN[White (W) vs. Black (B)]
       DT[1999-07-28]
+      RE[W+R]
       SY[Cgoban 1.9.2]TM[30:00(5x1:00)];
       AW[ea][eb][ec][bd][dd][ae][ce][de][cf][ef][cg][dg][eh][ci][di][bj][ej]
       AB[da][db][cc][dc][cd][be][bf][ag][bg][bh][ch][dh]LB[bd:A]PL[2]
@@ -125,10 +124,11 @@ module SGF
       game.board_size.should == 19
       game.handicap.should == 0
       game.komi.should == 5.5
+      game.result.should == 'W+R'
       game.played_on.should == "1999-07-28"
       game.white_player.should == 'White'
       game.black_player.should == 'Black'
-      game.application.should == 'Cgoban 1.9.2'
+      game.program.should == 'Cgoban 1.9.2'
       game.time_rule.should == '30:00(5x1:00)'
       
       root_node = game.root_node

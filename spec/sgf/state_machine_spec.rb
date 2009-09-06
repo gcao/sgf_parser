@@ -37,6 +37,13 @@ module SGF
       stm.state.should == :start
     end
     
+    it "nil means end of input" do
+      stm = StateMachine.new :start
+      stm.transition :start, nil, :end
+      stm.end
+      stm.state.should == :end
+    end
+    
     it "transition should invoke the lambda if triggered by an event" do
       stm = StateMachine.new :start
       stm.buffer = "123"

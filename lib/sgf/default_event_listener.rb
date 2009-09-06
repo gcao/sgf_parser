@@ -1,7 +1,9 @@
 module SGF
   class DefaultEventListener
+    include Debugger
+    
     def initialize debug_mode = false
-      @debug_mode = debug_mode
+      enable_debug_mode if debug_mode
     end
     
     def start_game
@@ -30,13 +32,6 @@ module SGF
     
     def end_game
       debug "end_game"
-    end
-   
-    protected
-    
-    def debug message
-      puts message if @debug_mode
-    end
-    
+    end   
   end
 end

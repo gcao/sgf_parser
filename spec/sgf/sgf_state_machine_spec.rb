@@ -41,7 +41,8 @@ module SGF
       end
       
       [
-        [SGFStateMachine::STATE_BEGIN, 'A']
+        # [SGFStateMachine::STATE_BEGIN, 'A'],
+        [SGFStateMachine::STATE_GAME_BEGIN, '['],
       ].each do |state_before, input|
         it "should raise error for '#{state_before}' + '#{input}'" do
           @stm.state = state_before
