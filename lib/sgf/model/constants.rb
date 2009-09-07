@@ -11,6 +11,7 @@ module SGF
       
       NODE_SETUP = 0
       NODE_MOVE  = 1
+      NODE_PASS  = 2
     end
   end
 end

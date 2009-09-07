@@ -23,6 +23,13 @@ module SGF
         node.move.should == [0, 1]
       end
       
+      it "sgf_play_black should set node type to PASS on empty move coordinate" do
+        node = Node.new
+        node.sgf_play_black "  "
+        node.node_type.should == Constants::NODE_PASS
+        node.color.should == Constants::BLACK
+      end
+      
       it "sgf_play_white should set node type to MOVE and save move information" do
         node = Node.new
         node.sgf_play_white "AB"
@@ -31,6 +38,13 @@ module SGF
         node.move.should == [0, 1]
       end
       
+      it "sgf_play_white should set node type to PASS on empty move coordinate" do
+        node = Node.new
+        node.sgf_play_white "  "
+        node.node_type.should == Constants::NODE_PASS
+        node.color.should == Constants::WHITE
+      end
+
       it "child returns first child" do
         node = Node.new
         first_child = Node.new(node)

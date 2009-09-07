@@ -70,19 +70,28 @@ module SGF
       end
       
       def sgf_play_black input
-        @node_type = NODE_MOVE
-        @color     = BLACK
-        @move      = to_position_array(input)
+        @color = BLACK
+        set_move input
       end
       
       def sgf_play_white input
-        @node_type = NODE_MOVE
-        @color     = WHITE
-        @move      = to_position_array(input)
+        @color = WHITE
+        set_move input
       end
       
       def sgf_label input
         @labels << to_label(input)
+      end
+      
+      private
+      
+      def set_move input
+        if input.nil? or input.strip.size == 0
+          @node_type = NODE_PASS
+        else
+          @node_type = NODE_MOVE
+          @move      = to_position_array(input)
+        end
       end
     end
   end
