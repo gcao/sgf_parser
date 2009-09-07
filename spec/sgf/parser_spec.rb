@@ -23,6 +23,11 @@ module SGF
       @parser.parse("(")
     end
     
+    it "should call end_game" do
+      mock(@listener).end_game
+      @parser.parse("(;)")
+    end
+    
     it "should call start_node" do
       mock(@listener).start_node
       @parser.parse("(;")

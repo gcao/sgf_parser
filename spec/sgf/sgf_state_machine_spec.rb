@@ -19,23 +19,29 @@ module SGF
         [SGFStateMachine::STATE_BEGIN,         '(', SGFStateMachine::STATE_GAME_BEGIN],
         [SGFStateMachine::STATE_GAME_BEGIN,    ';', SGFStateMachine::STATE_NODE],
         [SGFStateMachine::STATE_NODE,          'A', SGFStateMachine::STATE_PROP_NAME_BEGIN],
-        [SGFStateMachine::STATE_NODE,          ')', SGFStateMachine::STATE_GAME_VAR_END],
+        [SGFStateMachine::STATE_NODE,          ')', SGFStateMachine::STATE_VAR_END],
         [SGFStateMachine::STATE_PROP_NAME,     '[', SGFStateMachine::STATE_VALUE_BEGIN],
         [SGFStateMachine::STATE_VALUE_BEGIN,   'A', SGFStateMachine::STATE_VALUE],
         [SGFStateMachine::STATE_VALUE,         ']', SGFStateMachine::STATE_VALUE_END],
         [SGFStateMachine::STATE_VALUE_END,     ';', SGFStateMachine::STATE_NODE],
         [SGFStateMachine::STATE_VALUE_END,     '(', SGFStateMachine::STATE_VAR_BEGIN],
-        [SGFStateMachine::STATE_VALUE_END,     ')', SGFStateMachine::STATE_GAME_VAR_END],
+        [SGFStateMachine::STATE_VALUE_END,     ')', SGFStateMachine::STATE_VAR_END],
         [SGFStateMachine::STATE_VALUE_END,     'A', SGFStateMachine::STATE_PROP_NAME_BEGIN],
         [SGFStateMachine::STATE_VAR_BEGIN,     ';', SGFStateMachine::STATE_NODE],
-        [SGFStateMachine::STATE_GAME_VAR_END,  ';', SGFStateMachine::STATE_NODE],
-        [SGFStateMachine::STATE_GAME_VAR_END,  '(', SGFStateMachine::STATE_VAR_BEGIN]
+        [SGFStateMachine::STATE_VAR_END,  ';', SGFStateMachine::STATE_NODE],
+        [SGFStateMachine::STATE_VAR_END,  '(', SGFStateMachine::STATE_VAR_BEGIN]
       ].each do |state_before, input, state_after|
         it "should have transition for '#{state_before}' + '#{input}' => '#{state_after}'" do
           @stm.state = state_before
           @stm.event input
           @stm.state.should == state_after
         end
+      end
+      
+      it "end should trigger transition to game_end" do
+        @stm.state = SGFStateMachine::STATE_VAR_END
+        @stm.end
+        @stm.state.should == SGFStateMachine::STATE_GAME_END
       end
       
       it "should handle nested []" do

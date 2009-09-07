@@ -15,6 +15,8 @@ module SGF
       0.upto(input.size - 1) do |i|
         @stm.event(input[i,1])
       end
+      
+      @stm.end
     end
     
     def parse_file filename
