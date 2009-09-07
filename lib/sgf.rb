@@ -1,3 +1,4 @@
+require 'sgf/debugger'
 require 'sgf/state_machine'
 require 'sgf/sgf_state_machine'
 require 'sgf/default_event_listener'

@@ -1,12 +1,10 @@
 module SGF
-  class Parser
-    include SGFStateMachine
-    
+  class Parser    
     attr_reader :event_listener
     
     def initialize event_listener
       @event_listener = event_listener
-      @stm = create_state_machine event_listener
+      @stm = SGFStateMachine.new event_listener
     end
     
     def parse input

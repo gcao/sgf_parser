@@ -1,5 +1,5 @@
 module SGF
-  module SGFStateMachine
+  class SGFStateMachine < StateMachine
     
     STATE_BEGIN           = :begin
     STATE_GAME_BEGIN      = :game_begin       
@@ -13,9 +13,9 @@ module SGF
     STATE_VALUE_END       = :value_end
     STATE_INVALID         = :invalid
     
-    def create_state_machine context = nil
-      stm         = StateMachine.new(STATE_BEGIN)
-      stm.context = context
+    def initialize context = nil
+      super(STATE_BEGIN)
+      self.context = context
 
       start_game             = lambda{ |stm| return if stm.context.nil?; stm.context.start_game }
       start_node             = lambda{ |stm| return if stm.context.nil?; stm.context.start_node }
@@ -25,73 +25,102 @@ module SGF
       set_property_name      = lambda{ |stm| return if stm.context.nil?; stm.context.property_name = stm.buffer }
       set_property_value     = lambda{ |stm| return if stm.context.nil?; stm.context.property_value = stm.buffer }
       end_variation          = lambda{ |stm| return if stm.context.nil?; stm.context.end_variation }
+      inside_nested_bracket  = lambda{ |stm| stm.bracket_level > 0 }
+      increase_bracket_level = lambda{ |stm| stm.increment_bracket_level }
+      decrease_bracket_level = lambda{ |stm| stm.decrement_bracket_level }
       report_error           = lambda{ |stm| raise ParseError.new('SGF Error near "' + stm.input + '"') }
 
-      stm.transition STATE_BEGIN,        
+      transition STATE_BEGIN,        
                      /\(/,        
                      STATE_GAME_BEGIN,
                      start_game
                            
-      stm.transition [STATE_GAME_BEGIN, STATE_GAME_VAR_END, STATE_VALUE_END],   
+      transition [STATE_GAME_BEGIN, STATE_GAME_VAR_END, STATE_VALUE_END],   
                      /;/,
                      STATE_NODE,
                      start_node
       
-      stm.transition STATE_VAR_BEGIN,
+      transition STATE_VAR_BEGIN,
                      /;/,
                      STATE_NODE
       
-      stm.transition [STATE_NODE, STATE_GAME_VAR_END, STATE_VALUE_END],
+      transition [STATE_NODE, STATE_GAME_VAR_END, STATE_VALUE_END],
                      /\(/,        
                      STATE_VAR_BEGIN,
                      start_variation
       
-      stm.transition [STATE_NODE, STATE_VALUE_END],
+      transition [STATE_NODE, STATE_VALUE_END],
                      /[a-zA-Z]/,  
                      STATE_PROP_NAME_BEGIN,
                      store_input_in_buffer
       
-      stm.transition STATE_PROP_NAME_BEGIN,
+      transition STATE_PROP_NAME_BEGIN,
                      /[a-zA-Z]/,  
                      STATE_PROP_NAME,
                      append_input_to_buffer
       
-      stm.transition [STATE_PROP_NAME_BEGIN, STATE_PROP_NAME],    
+      transition [STATE_PROP_NAME_BEGIN, STATE_PROP_NAME],    
                      /\[/,        
                      STATE_VALUE_BEGIN,
                      set_property_name
         
-      stm.transition STATE_VALUE_END,
+      transition STATE_VALUE_END,
                      /\[/,        
                      STATE_VALUE_BEGIN
                      
-      stm.transition STATE_VALUE_BEGIN,
+      transition STATE_VALUE_BEGIN,
                      /[^\]]/,
                      STATE_VALUE,
                      store_input_in_buffer
                        
-      stm.transition STATE_VALUE,
+      transition STATE_VALUE,
+                     /\[/,
+                     nil,
+                     increase_bracket_level
+                     
+      transition_if inside_nested_bracket,
+                     STATE_VALUE,
+                     /\]/,
+                     nil,
+                     decrease_bracket_level
+                       
+      transition STATE_VALUE,
                      /[^\]]/,
                      nil,
                      append_input_to_buffer
                        
-      stm.transition STATE_VALUE,        
+      transition STATE_VALUE,        
                      /\]/,        
                      STATE_VALUE_END,
                      set_property_value
     
-      stm.transition [STATE_NODE, STATE_VALUE_END],
+      transition [STATE_NODE, STATE_VALUE_END],
                      /\)/,        
                      STATE_GAME_VAR_END,
                      end_variation
 
-      stm.transition [STATE_BEGIN, STATE_GAME_BEGIN],
+      transition [STATE_BEGIN, STATE_GAME_BEGIN],
                      /[^\s]/, 
                      STATE_INVALID,
                      report_error
 
-      stm
+    end
+              
+    def bracket_level
+      @bracket_level ||= 0
     end
                        
+    def increment_bracket_level
+      @bracket_level ||= 0
+      @bracket_level += 1
+    end
+    
+    def decrement_bracket_level
+      if self.bracket_level > 0
+        @bracket_level -= 0
+      else
+        @bracket_level = 0
+      end
+    end
   end
 end

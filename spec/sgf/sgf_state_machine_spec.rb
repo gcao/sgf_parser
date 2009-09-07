@@ -2,15 +2,13 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 module SGF
   describe SGFStateMachine do
-    include SGFStateMachine
-
     describe "with no context" do
       before :each do
-        @stm = create_state_machine
+        @stm = SGFStateMachine.new
       end
 
       it "should return state machine for sgf" do
-        @stm.class.should == SGF::StateMachine
+        @stm.class.should == SGFStateMachine
       end
 
       it "should have start_state of #{SGFStateMachine::STATE_BEGIN}" do
@@ -40,8 +38,16 @@ module SGF
         end
       end
       
+      it "should handle nested []" do
+        @stm.state = SGFStateMachine::STATE_VALUE
+        @stm.event '['
+        @stm.state.should == SGFStateMachine::STATE_VALUE
+        @stm.event ']'
+        @stm.state.should == SGFStateMachine::STATE_VALUE
+      end
+      
       [
-        # [SGFStateMachine::STATE_BEGIN, 'A'],
+        [SGFStateMachine::STATE_BEGIN, 'A'],
         [SGFStateMachine::STATE_GAME_BEGIN, '['],
       ].each do |state_before, input|
         it "should raise error for '#{state_before}' + '#{input}'" do
@@ -56,7 +62,7 @@ module SGF
     describe "with context" do
       before :each do
         @context = Object.new
-        @stm = create_state_machine @context
+        @stm = SGFStateMachine.new @context
       end
       
       it "Transition to game begin should call context.start_game" do

@@ -1,6 +1,8 @@
 module SGF
   class StateMachine
-    include Debugger
+    include SGF::Debugger
+    
+    Transition = Struct.new(:condition, :before_state, :event_pattern, :after_state, :callback)
 
     attr_reader :start_state, :transitions
     attr_reader :before_state, :input
@@ -12,32 +14,39 @@ module SGF
     end
     
     def transition before_state, event_pattern, after_state, callback = nil
+      transition_if nil, before_state, event_pattern, after_state, callback
+    end
+    
+    def transition_if condition, before_state, event_pattern, after_state, callback = nil
       if before_state.class == Array
         before_state.each do |s|
-          transition(s, event_pattern, after_state, callback)
+          transition_if(condition, s, event_pattern, after_state, callback)
         end
         return
       end
       
-      transition = transitions[before_state]
-      transitions[before_state] = transition = [] unless transition
-      transition << [event_pattern, after_state, callback]
+      transition = self.transitions[before_state]
+      self.transitions[before_state] = transition = [] unless transition
+      transition << Transition.new(condition, before_state, event_pattern, after_state, callback)
     end
     
     def event input
       debug "'#{@state}' + '#{input}'"
       @before_state = @state
       @input = input
-      transition = transitions[@state]
-      return false unless transition
       
-      found = transition.find do |item|
-        (input.nil? and item[0].nil?) or input =~ item[0]
+      transitions_for_state = self.transitions[@state]
+      return false unless transitions_for_state
+      
+      transition = transitions_for_state.detect do |t|
+        next false if t.condition and not t.condition.call(self)
+        
+        (input.nil? and t.event_pattern.nil?) or input =~ t.event_pattern
       end
       
-      if found
-        @state = found[1] unless found[1].nil?
-        found[2].call self unless found[2].nil?
+      if transition
+        @state = transition.after_state unless transition.after_state.nil?
+        transition.callback.call(self) unless transition.callback.nil?
         true
       else
         false

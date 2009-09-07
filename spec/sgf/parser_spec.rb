@@ -67,7 +67,7 @@ module SGF
     end
     
     it "should parse game in file" do
-      @parser.parse_file File.expand_path(File.dirname(__FILE__) + '/../example.sgf')
+      @parser.parse_file File.expand_path(File.dirname(__FILE__) + '/../fixtures/good.sgf')
       game = @listener.game
       game.name.should == 'White (W) vs. Black (B)'
       game.rule.should == 'Japanese'
@@ -175,15 +175,19 @@ module SGF
     end
 
     it "parse_file should take a sgf file and parse it and return the game" do
-      game = SGF::Parser.parse_file File.expand_path(File.dirname(__FILE__) + '/../example.sgf')
+      game = SGF::Parser.parse_file File.expand_path(File.dirname(__FILE__) + '/../fixtures/good.sgf')
       game.name.should == 'White (W) vs. Black (B)'
     end
 
     it "parse_file should pass debug parameter to event listener" do
       event_listener = SGF::Model::EventListener.new(false)
       mock(SGF::Model::EventListener).new(true) {event_listener}
-      game = SGF::Parser.parse_file(File.expand_path(File.dirname(__FILE__) + '/../example.sgf'), true)
+      game = SGF::Parser.parse_file(File.expand_path(File.dirname(__FILE__) + '/../fixtures/good.sgf'), true)
       game.name.should == 'White (W) vs. Black (B)'
+    end
+    
+    it "should parse game with nested []" do
+      game = SGF::Parser.parse_file(File.expand_path(File.dirname(__FILE__) + '/../fixtures/good1.sgf'))
     end
   end
 end

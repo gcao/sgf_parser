@@ -37,6 +37,13 @@ module SGF
       stm.state.should == :start
     end
     
+    it "event should not trigger state transition and return false if condition is not met" do
+      stm = StateMachine.new :start
+      stm.transition_if lambda{false}, :start, /a/, :end
+      stm.event('a').should be_false
+      stm.state.should == :start
+    end
+    
     it "nil means end of input" do
       stm = StateMachine.new :start
       stm.transition :start, nil, :end
