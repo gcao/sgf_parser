@@ -1,13 +1,13 @@
-require 'sgf/debugger'
-require 'sgf/state_machine'
-require 'sgf/sgf_state_machine'
-require 'sgf/default_event_listener'
-require 'sgf/parser'
-require 'sgf/parse_error'
-require 'sgf/sgf_helper'
+require File.expand_path(File.dirname(__FILE__) + '/sgf/debugger')
+require File.expand_path(File.dirname(__FILE__) + '/sgf/state_machine')
+require File.expand_path(File.dirname(__FILE__) + '/sgf/sgf_state_machine')
+require File.expand_path(File.dirname(__FILE__) + '/sgf/default_event_listener')
+require File.expand_path(File.dirname(__FILE__) + '/sgf/parser')
+require File.expand_path(File.dirname(__FILE__) + '/sgf/parse_error')
+require File.expand_path(File.dirname(__FILE__) + '/sgf/sgf_helper')
 
-require 'sgf/model/constants'
-require 'sgf/model/event_listener'
-require 'sgf/model/game'
-require 'sgf/model/node'
-require 'sgf/model/label'
+require File.expand_path(File.dirname(__FILE__) + '/sgf/model/constants')
+require File.expand_path(File.dirname(__FILE__) + '/sgf/model/event_listener')
+require File.expand_path(File.dirname(__FILE__) + '/sgf/model/game')
+require File.expand_path(File.dirname(__FILE__) + '/sgf/model/node')
+require File.expand_path(File.dirname(__FILE__) + '/sgf/model/label')

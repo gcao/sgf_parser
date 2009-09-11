@@ -1,1 +1,8 @@
 A SGF parser gem
+
+
+NOTES
+
+(Below are tested on MAC OS X 10.5.8)
+Use 'file -i XXX.sgf' to check file encoding 
+Use 'iconv -f gb18030 XXX.sgf' to convert GB2312/GB18030 to UTF16 
