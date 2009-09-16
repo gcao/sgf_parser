@@ -191,7 +191,7 @@ module SGF
       game.name.should == 'White (W) vs. Black (B)'
     end
     
-    it "should parse game with nested []" do
+    it "should parse game with escaped []" do
       game = SGF::Parser.parse_file(File.expand_path(File.dirname(__FILE__) + '/../fixtures/good1.sgf'))
     end
   end

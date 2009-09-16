@@ -2,7 +2,7 @@ module SGF
   class StateMachine
     include SGF::Debugger
     
-    Transition = Struct.new(:condition, :before_state, :event_pattern, :after_state, :callback)
+    Transition = Struct.new(:description, :condition, :before_state, :event_pattern, :after_state, :callback)
 
     attr_reader :start_state, :transitions
     attr_reader :before_state, :input
@@ -13,13 +13,19 @@ module SGF
       @transitions = {}
     end
     
+    def desc description
+      @description = description
+    end
+    
     def transition before_state, event_pattern, after_state, callback = nil
       transition_if nil, before_state, event_pattern, after_state, callback
     end
     
     def transition_if condition, before_state, event_pattern, after_state, callback = nil
       if before_state.class == Array
+        saved_description = @description
         before_state.each do |s|
+          @description = saved_description
           transition_if(condition, s, event_pattern, after_state, callback)
         end
         return
@@ -27,7 +33,13 @@ module SGF
       
       transition = self.transitions[before_state]
       self.transitions[before_state] = transition = [] unless transition
-      transition << Transition.new(condition, before_state, event_pattern, after_state, callback)
+      transition << Transition.new(@description, condition, before_state, event_pattern, after_state, callback)
+      
+      @description = nil
+    end
+    
+    def reset
+      @state = @start_state
     end
     
     def event input

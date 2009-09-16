@@ -4,10 +4,13 @@ module SGF
     
     def initialize event_listener
       @event_listener = event_listener
-      @stm = SGFStateMachine.new event_listener
+      @stm = SGFStateMachine.new
+      @stm.context = event_listener
     end
     
     def parse input
+      @stm.reset
+      
       raise ArgumentError.new if input.nil? or input.strip.empty?
       
       input.strip!

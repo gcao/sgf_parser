@@ -23,13 +23,15 @@ module SGF
         [SGFStateMachine::STATE_PROP_NAME,     '[', SGFStateMachine::STATE_VALUE_BEGIN],
         [SGFStateMachine::STATE_VALUE_BEGIN,   'A', SGFStateMachine::STATE_VALUE],
         [SGFStateMachine::STATE_VALUE,         ']', SGFStateMachine::STATE_VALUE_END],
+        [SGFStateMachine::STATE_VALUE,         '\\', SGFStateMachine::STATE_VALUE_ESCAPE],
+        [SGFStateMachine::STATE_VALUE_ESCAPE,  ']', SGFStateMachine::STATE_VALUE],
         [SGFStateMachine::STATE_VALUE_END,     ';', SGFStateMachine::STATE_NODE],
         [SGFStateMachine::STATE_VALUE_END,     '(', SGFStateMachine::STATE_VAR_BEGIN],
         [SGFStateMachine::STATE_VALUE_END,     ')', SGFStateMachine::STATE_VAR_END],
         [SGFStateMachine::STATE_VALUE_END,     'A', SGFStateMachine::STATE_PROP_NAME_BEGIN],
         [SGFStateMachine::STATE_VAR_BEGIN,     ';', SGFStateMachine::STATE_NODE],
-        [SGFStateMachine::STATE_VAR_END,  ';', SGFStateMachine::STATE_NODE],
-        [SGFStateMachine::STATE_VAR_END,  '(', SGFStateMachine::STATE_VAR_BEGIN]
+        [SGFStateMachine::STATE_VAR_END,       ';', SGFStateMachine::STATE_NODE],
+        [SGFStateMachine::STATE_VAR_END,       '(', SGFStateMachine::STATE_VAR_BEGIN]
       ].each do |state_before, input, state_after|
         it "should have transition for '#{state_before}' + '#{input}' => '#{state_after}'" do
           @stm.state = state_before
@@ -44,10 +46,10 @@ module SGF
         @stm.state.should == SGFStateMachine::STATE_GAME_END
       end
       
-      it "should handle nested []" do
+      it "should handle escaped characters" do
         @stm.state = SGFStateMachine::STATE_VALUE
-        @stm.event '['
-        @stm.state.should == SGFStateMachine::STATE_VALUE
+        @stm.event '\\'
+        @stm.state.should == SGFStateMachine::STATE_VALUE_ESCAPE
         @stm.event ']'
         @stm.state.should == SGFStateMachine::STATE_VALUE
       end
@@ -68,7 +70,9 @@ module SGF
     describe "with context" do
       before :each do
         @context = Object.new
-        @stm = SGFStateMachine.new @context
+        @stm = SGFStateMachine.new
+        @stm.context = @context
+        @stm.reset
       end
       
       it "Transition to game begin should call context.start_game" do
