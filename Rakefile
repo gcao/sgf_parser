@@ -56,8 +56,6 @@ task :make_spec do
 end
 
 desc "visualize SGF state machine"
-task :visualize_state_machine do
+task :vst do
   system("bin/stm2dot && dot -T svg -o doc/sgf_state_machine.svg doc/sgf_state_machine.dot")
 end
-
-task :vst => :visualize_state_machine
