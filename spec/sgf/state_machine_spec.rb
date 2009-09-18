@@ -127,5 +127,11 @@ module SGF
       @stm.buffer.should == "1234"
     end
     
+    it "clear_buffer should clear buffer" do
+      @stm.buffer = "abc"
+      @stm.clear_buffer
+      @stm.buffer.should == ""
+    end
+    
   end
 end

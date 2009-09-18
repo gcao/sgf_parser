@@ -24,8 +24,8 @@ module SGF
       start_variation        = lambda{ |stm| return if stm.context.nil?; stm.context.start_variation }
       store_input_in_buffer  = lambda{ |stm| return if stm.context.nil?; stm.buffer = stm.input }
       append_input_to_buffer = lambda{ |stm| return if stm.context.nil?; stm.buffer += stm.input }
-      set_property_name      = lambda{ |stm| return if stm.context.nil?; stm.context.property_name = stm.buffer }
-      set_property_value     = lambda{ |stm| return if stm.context.nil?; stm.context.property_value = stm.buffer }
+      set_property_name      = lambda{ |stm| return if stm.context.nil?; stm.context.property_name = stm.buffer; stm.clear_buffer }
+      set_property_value     = lambda{ |stm| return if stm.context.nil?; stm.context.property_value = stm.buffer; stm.clear_buffer }
       end_variation          = lambda{ |stm| return if stm.context.nil?; stm.context.end_variation }
       report_error           = lambda{ |stm| raise ParseError.new('SGF Error near "' + stm.input + '"') }
 
@@ -86,7 +86,7 @@ module SGF
                      nil,
                      append_input_to_buffer
                        
-      transition STATE_VALUE,        
+      transition [STATE_VALUE_BEGIN, STATE_VALUE],        
                      /\]/,        
                      STATE_VALUE_END,
                      set_property_value

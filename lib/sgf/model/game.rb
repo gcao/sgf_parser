@@ -14,6 +14,10 @@ module SGF
         @komi        = DEFAULT_KOMI
       end
       
+      def misc_properties
+        @misc_properties ||= {}
+      end
+      
       def game_type=(value);  @game_type  = value.to_i; end
       def board_size=(value); @board_size = value.to_i; end
       def handicap=(value);   @handicap   = value.to_i; end

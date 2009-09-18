@@ -5,10 +5,13 @@ module SGF
       
       attr_reader :node
       
+      GAME_MISC_PROPERTIES = %w(FF US)
+      NODE_MISC_PROPERTIES = %w(N GW GB DM UC TE BM DO IT)
+      
       GAME_PROPERTY_MAPPINGS = {
         'GM' => :game_type=, 'GN' => :name=, 'RU' => :rule=, 'SZ' => :board_size=, 'HA' => :handicap=, 'KM' => :komi=,
         'PW' => :white_player=, 'PB' => :black_player=, 'DT' => :played_on=, 'TM' => :time_rule=,
-        'SY' => :program=, 'RE' => :result=
+        'SY' => :program=, 'RE' => :result=, 'AP' => :program=
       }
       
       NODE_PROPERTY_MAPPINGS = {
@@ -81,7 +84,13 @@ module SGF
         return if set_game_property(name, value)
         return if set_node_property(name, value)
         
-        puts "WARNING: SGF property is not recognized(name=#{name}, value=#{value})"
+        if GAME_MISC_PROPERTIES.include?(name)
+          game.misc_properties[name] = value
+        elsif NODE_MISC_PROPERTIES.include?(name)
+          node.misc_properties[name] = value
+        else
+          puts "WARNING: SGF property is not recognized(name=#{name}, value=#{value})"
+        end
       end
       
       def set_game_property name, value

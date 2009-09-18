@@ -68,5 +68,9 @@ module SGF
     def end
       event nil
     end
+    
+    def clear_buffer
+      self.buffer = ""
+    end
   end
 end

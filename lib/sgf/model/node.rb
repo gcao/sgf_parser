@@ -20,6 +20,10 @@ module SGF
         end
       end
       
+      def misc_properties
+        @misc_properties ||= {}
+      end
+      
       def whose_turn= input
         @whose_turn = input.to_i
       end
