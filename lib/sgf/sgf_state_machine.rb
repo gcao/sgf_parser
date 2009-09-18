@@ -4,7 +4,7 @@ module SGF
     STATE_BEGIN           = :begin
     STATE_GAME_BEGIN      = :game_begin       
     STATE_GAME_END        = :game_end
-    STATE_NODE            = :node             
+    STATE_NODE            = :game_node             
     STATE_VAR_BEGIN       = :var_begin        
     STATE_VAR_END         = :game_var_end     
     STATE_PROP_NAME_BEGIN = :prop_name_begin

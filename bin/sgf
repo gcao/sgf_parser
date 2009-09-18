@@ -3,7 +3,7 @@
 if ARGV.size == 0
   puts <<-USAGE
 Usage: 
-  sgf FILE_TO_PARSE
+  sgf <SGF_FILE>
   USAGE
   exit 1
 end
