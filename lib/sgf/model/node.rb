@@ -36,6 +36,10 @@ module SGF
         @white_moves ||= []
       end
       
+      def clear_moves
+        @white_moves ||= []
+      end
+      
       def children
         @children ||= []
       end
@@ -71,6 +75,10 @@ module SGF
       
       def sgf_setup_white input
         to_position_array(input).each {|position| self.white_moves << position}
+      end
+      
+      def sgf_setup_clear input
+        to_position_array(input).each {|position| self.clear_moves << position}
       end
       
       def sgf_play_black input

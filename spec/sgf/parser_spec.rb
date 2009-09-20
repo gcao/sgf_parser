@@ -61,7 +61,7 @@ module SGF
     
     it "should call end_variation" do
       mock(@listener).end_variation
-      @parser.parse("(;(;))")
+      @parser.parse("(;(;)")
     end
   end
   

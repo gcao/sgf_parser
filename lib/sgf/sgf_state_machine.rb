@@ -99,12 +99,12 @@ module SGF
                      STATE_GAME_END,
                      end_game
     
-      transition [STATE_NODE, STATE_VALUE_END],
+      transition [STATE_NODE, STATE_VALUE_END, STATE_VAR_END],
                      /\)/,        
                      STATE_VAR_END,
                      end_variation
 
-      transition [STATE_BEGIN, STATE_GAME_BEGIN],
+      transition [STATE_BEGIN, STATE_GAME_BEGIN, STATE_NODE, STATE_VAR_BEGIN, STATE_VAR_END, STATE_PROP_NAME_BEGIN, STATE_PROP_NAME, STATE_VALUE_END],
                      /[^\s]/, 
                      STATE_INVALID,
                      report_error

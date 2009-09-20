@@ -56,8 +56,14 @@ module SGF
       end
       
       [
-        [SGFStateMachine::STATE_BEGIN, 'A'],
-        [SGFStateMachine::STATE_GAME_BEGIN, '['],
+        [SGFStateMachine::STATE_BEGIN           , 'A'],
+        [SGFStateMachine::STATE_GAME_BEGIN      , '['],
+        [SGFStateMachine::STATE_NODE            , '['],
+        [SGFStateMachine::STATE_VAR_BEGIN       , '['],
+        [SGFStateMachine::STATE_VAR_END         , '['],
+        [SGFStateMachine::STATE_PROP_NAME_BEGIN , ']'],
+        [SGFStateMachine::STATE_PROP_NAME       , ']'],
+        [SGFStateMachine::STATE_VALUE_END       , ']'],
       ].each do |state_before, input|
         it "should raise error for '#{state_before}' + '#{input}'" do
           @stm.state = state_before

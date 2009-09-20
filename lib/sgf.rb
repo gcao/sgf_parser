@@ -7,6 +7,7 @@ require File.expand_path(File.dirname(__FILE__) + '/sgf/parse_error')
 require File.expand_path(File.dirname(__FILE__) + '/sgf/sgf_helper')
 
 require File.expand_path(File.dirname(__FILE__) + '/sgf/model/constants')
+require File.expand_path(File.dirname(__FILE__) + '/sgf/model/property_handler')
 require File.expand_path(File.dirname(__FILE__) + '/sgf/model/event_listener')
 require File.expand_path(File.dirname(__FILE__) + '/sgf/model/game')
 require File.expand_path(File.dirname(__FILE__) + '/sgf/model/node')

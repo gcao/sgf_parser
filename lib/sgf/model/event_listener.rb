@@ -3,29 +3,10 @@ module SGF
     class EventListener < SGF::DefaultEventListener
       include SGF::SGFHelper
       
-      attr_reader :node
-      
-      GAME_MISC_PROPERTIES = %w(FF US)
-      NODE_MISC_PROPERTIES = %w(N GW GB DM UC TE BM DO IT)
-      
-      GAME_PROPERTY_MAPPINGS = {
-        'GM' => :game_type=, 'GN' => :name=, 'RU' => :rule=, 'SZ' => :board_size=, 'HA' => :handicap=, 'KM' => :komi=,
-        'PW' => :white_player=, 'PB' => :black_player=, 'DT' => :played_on=, 'TM' => :time_rule=,
-        'SY' => :program=, 'RE' => :result=, 'AP' => :program=
-      }
-      
-      NODE_PROPERTY_MAPPINGS = {
-        "B" => :sgf_play_black, "W" => :sgf_play_white, "C" => :comment=,
-        "AB" => :sgf_setup_black, "AW" => :sgf_setup_white, "LB" => :sgf_label,
-        "PL" => :whose_turn=
-      }
+      attr_reader :game, :node
       
       def initialize debug_mode = false
         super(debug_mode)
-      end
-      
-      def game
-        @game ||= Game.new
       end
       
       def start_game
@@ -80,35 +61,11 @@ module SGF
         return unless name
         name = name.strip.upcase
         value.strip! unless value.nil?
+        
+        return if GAME_PROPERTY_HANDLER.handle(game, name, value)
+        return if NODE_PROPERTY_HANDLER.handle(node, name, value)
 
-        return if set_game_property(name, value)
-        return if set_node_property(name, value)
-        
-        if GAME_MISC_PROPERTIES.include?(name)
-          game.misc_properties[name] = value
-        elsif NODE_MISC_PROPERTIES.include?(name)
-          node.misc_properties[name] = value
-        else
-          puts "WARNING: SGF property is not recognized(name=#{name}, value=#{value})"
-        end
-      end
-      
-      def set_game_property name, value
-        game_method = GAME_PROPERTY_MAPPINGS[name]
-        
-        if game_method
-          game.send(game_method, value)
-          true
-        end
-      end
-
-      def set_node_property name, value
-        node_method = NODE_PROPERTY_MAPPINGS[name]
-        
-        if node_method
-          node.send(node_method, value)
-          true
-        end
+        puts "WARNING: SGF property is not recognized(name=#{name}, value=#{value})"
       end
     end
   end
