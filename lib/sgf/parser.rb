@@ -21,9 +21,8 @@ module SGF
       end
       
       @stm.end
-    rescue SGF::ParseError => e
-      puts e
-      raise format_error input, @position, e
+    rescue StateMachineError => e
+      raise ParseError.new input, @position, e.message
     end
     
     def parse_file filename
@@ -45,21 +44,6 @@ module SGF
         parser.event_listener.game
       end
     end
-    
-    private
-    
-    def format_error input, position, e
-      if position > 1000
-        start_position = position - 1000
-        s = '"...'
-      else
-        start_position = 0
-        s = '"'
-      end
-      s << input[start_position..position]
-      s << '" <==='
-      s << e.message
-      raise s
-    end
+
   end
 end

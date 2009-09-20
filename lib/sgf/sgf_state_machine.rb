@@ -1,4 +1,7 @@
 module SGF
+  class StateMachineError < StandardError
+  end
+  
   class SGFStateMachine < StateMachine
     
     STATE_BEGIN           = :begin
@@ -27,7 +30,7 @@ module SGF
       set_property_name      = lambda{ |stm| return if stm.context.nil?; stm.context.property_name = stm.buffer; stm.clear_buffer }
       set_property_value     = lambda{ |stm| return if stm.context.nil?; stm.context.property_value = stm.buffer; stm.clear_buffer }
       end_variation          = lambda{ |stm| return if stm.context.nil?; stm.context.end_variation }
-      report_error           = lambda{ |stm| raise ParseError.new('SGF Error near "' + stm.input + '"') }
+      report_error           = lambda{ |stm| raise StateMachineError.new('SGF Error near "' + stm.input + '"') }
 
       transition STATE_BEGIN,        
                      /\(/,        
