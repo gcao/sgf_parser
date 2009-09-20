@@ -66,11 +66,11 @@ module SGF
       end
       
       def sgf_setup_black input
-        black_moves << to_position_array(input)
+        to_position_array(input).each {|position| self.black_moves << position}
       end
       
       def sgf_setup_white input
-        white_moves << to_position_array(input)
+        to_position_array(input).each {|position| self.white_moves << position}
       end
       
       def sgf_play_black input
@@ -94,7 +94,7 @@ module SGF
           @node_type = NODE_PASS
         else
           @node_type = NODE_MOVE
-          @move      = to_position_array(input)
+          @move      = to_position(input)
         end
       end
     end
