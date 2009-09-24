@@ -86,6 +86,12 @@ module SGF
       game.time_rule.should == '30:00(5x1:00)'
     end
     
+    it "should raise BinaryFileError on parsing binary file" do
+      lambda {
+        @parser.parse_file File.expand_path(File.dirname(__FILE__) + '/../fixtures/test.png')
+      }.should raise_error(SGF::BinaryFileError)
+    end
+    
     it "should parse game without moves" do
       @parser.parse <<-INPUT
       (;GM[1]FF[3]
@@ -193,6 +199,10 @@ module SGF
     
     it "should parse game with escaped []" do
       game = SGF::Parser.parse_file(File.expand_path(File.dirname(__FILE__) + '/../fixtures/good1.sgf'))
+    end
+    
+    it "is_binary? should return true for binary file" do
+      SGF::Parser.is_binary?(File.expand_path(File.dirname(__FILE__) + '/../fixtures/test.png')).should be_true
     end
   end
 end
