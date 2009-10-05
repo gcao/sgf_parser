@@ -4,8 +4,10 @@ module SGF
       include Constants
       include SGF::SGFHelper
       
-      attr_accessor :game_type, :name, :rule, :board_size, :handicap, :komi, :black_player, :white_player,
-                    :played_on, :time_rule, :program, :result
+      attr_accessor :game_type, :name, :rule, :board_size, :handicap, :komi, 
+                    :black_player, :black_rank, :white_player, :white_rank,
+                    :time_rule, :overtime_rule, :result, 
+                    :played_on, :program, :place, :event, :round
 
       def initialize
         @game_type   = WEIQI
@@ -25,6 +27,10 @@ module SGF
 
       def root_node
         @root_node ||= Node.new(nil)
+      end
+      
+      def time_rule
+        @time_rule.to_s + (overtime_rule ? " (#{overtime_rule})" : "")
       end
       
     end

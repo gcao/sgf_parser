@@ -22,7 +22,7 @@ module SGF
       
       @stm.end
     rescue StateMachineError => e
-      raise ParseError.new input, @position, e.message
+      raise ParseError.new(input, @position, e.message)
     end
     
     def parse_file filename
