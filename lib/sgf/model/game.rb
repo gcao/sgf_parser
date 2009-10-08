@@ -33,6 +33,18 @@ module SGF
         @time_rule.to_s + (overtime_rule ? " (#{overtime_rule})" : "")
       end
       
+      def moves
+        moves = 0
+        
+        node = root_node
+        while node
+          moves = node.move_no
+          node = node.children[0]
+        end
+        
+        moves
+      end
+      
     end
   end
 end

@@ -20,6 +20,11 @@ module SGF
         end
       end
       
+      def move_no
+        parent_move_no = parent.nil? ? 0 : parent.move_no
+        self.node_type == NODE_MOVE ? parent_move_no + 1 : parent_move_no
+      end
+      
       def misc_properties
         @misc_properties ||= {}
       end

@@ -3,6 +3,34 @@ require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 module SGF
   module Model
     describe Node do
+      describe "move_no" do
+        it "should return parent node's move number + 1 if current node is a move" do
+          parent = Node.new
+          mock(parent).move_no{ 10 }
+          node = Node.new(parent)
+          node.sgf_play_black 'AB'
+          node.move_no.should == 11
+        end
+
+        it "should return parent node's move number if current node is not a move" do
+          parent = Node.new
+          mock(parent).move_no{ 10 }
+          node = Node.new(parent)
+          node.move_no.should == 10
+        end
+
+        it "should return 0 if parent is nil and current node is not a move" do
+          node = Node.new
+          node.move_no.should == 0
+        end
+      
+        it "should return 1 if parent is nil and current node is a move" do
+          node = Node.new
+          node.sgf_play_black "AB"
+          node.move_no.should == 1
+        end
+      end
+      
       it "sgf_setup_black should add an entry to black_moves" do
         node = Node.new
         node.sgf_setup_black "AB"
