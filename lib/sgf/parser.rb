@@ -46,8 +46,9 @@ module SGF
       end
       
       def is_binary? file
-        parts = %x(file -i #{file}).split(':', 2)
-        not parts[1].include?('text')
+        # This does not work?!
+        # parts = %x(/usr/bin/file -i #{file}).split(':', 2)
+        # not parts[1].include?('text')
       end
     end
 
