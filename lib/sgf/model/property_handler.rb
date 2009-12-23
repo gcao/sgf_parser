@@ -31,7 +31,7 @@ module SGF
       'SY' => :program=, 'RE' => :result=, 'AP' => :program=, 'PC' => :place=, 'EV' => :event=, 'RO' => :round=
     }
 
-    GAME_MISC_PROPERTIES = %w(FF US)
+    GAME_MISC_PROPERTIES = %w(FF US CA ST)
 
     NODE_PROPERTY_MAPPINGS = {
       "B" => :sgf_play_black, "W" => :sgf_play_white, "C" => :comment=,
