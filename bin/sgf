@@ -16,4 +16,12 @@ else
   require 'sgf'
 end
 
-SGF::Parser.parse_file(ARGV[0], true)
+filename = ARGV[0]
+
+if File.directory?(filename)
+  Dir["#{filename}/**/*"].each do |file|
+    SGF::Parser.parse_file(file, false)
+  end
+else
+  SGF::Parser.parse_file(filename, true)
+end

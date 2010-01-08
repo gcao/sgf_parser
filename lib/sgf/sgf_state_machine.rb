@@ -109,5 +109,28 @@ module SGF
                      STATE_INVALID,
                      report_error
     end
+
+    # Overwrite parent to get better performance!
+    def event input
+      unless context.nil?
+        case @state
+          when STATE_VALUE, STATE_VALUE_BEGIN
+            if input != "\\" and input != "]"
+              self.buffer += input
+              return
+            end
+          when STATE_PROP_NAME_BEGIN, STATE_PROP_NAME
+            if input != "["
+              self.buffer += input
+              return
+            end
+          when STATE_VALUE_ESCAPE
+            self.buffer += input
+            return
+        end
+      end
+
+      super input
+    end
   end
 end
