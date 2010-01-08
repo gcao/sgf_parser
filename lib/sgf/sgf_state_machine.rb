@@ -112,7 +112,7 @@ module SGF
 
     # Overwrite parent to get better performance!
     def event input
-      unless context.nil?
+      unless context.nil? or input.nil?
         case @state
           when STATE_VALUE, STATE_VALUE_BEGIN
             if input != "\\" and input != "]"

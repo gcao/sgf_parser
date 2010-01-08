@@ -3,7 +3,7 @@
 if ARGV.size == 0
   puts <<-USAGE
 Usage: 
-  sgf <SGF_FILE>
+  sgf <DIRECTORY_OR_FILE>
   USAGE
   exit 1
 end
@@ -17,11 +17,12 @@ else
 end
 
 filename = ARGV[0]
+debug    = ENV["DEBUG"] == "true"
 
 if File.directory?(filename)
   Dir["#{filename}/**/*"].each do |file|
-    SGF::Parser.parse_file(file, false)
+    SGF::Parser.parse_file(file, debug)
   end
 else
-  SGF::Parser.parse_file(filename, true)
+  SGF::Parser.parse_file(filename, debug)
 end
