@@ -5,4 +5,13 @@ NOTES
 
 (Below are tested on MAC OS X 10.5.8)
 Use 'file -i XXX.sgf' to check file encoding 
-Use 'iconv -f gb18030 XXX.sgf' to convert GB2312/GB18030 to UTF16 
+Use 'iconv -f gb18030 XXX.sgf' to convert GB2312/GB18030 to UTF16
+
+Benchmark
+
+time for i in {1..1000}; do bin/sgf spec/fixtures/2009-11-01-1.sgf; done
+
+Fri Jan  8 08:49:18 EST 2010
+  real    0m26.221s
+  user    0m20.404s
+  sys     0m5.262s
