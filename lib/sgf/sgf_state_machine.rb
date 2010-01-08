@@ -114,7 +114,7 @@ module SGF
     def event input
       unless context.nil? or input.nil?
         case @state
-          when STATE_VALUE, STATE_VALUE_BEGIN
+          when STATE_VALUE
             if input != "\\" and input != "]"
               self.buffer += input
               return
