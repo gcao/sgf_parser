@@ -114,22 +114,61 @@ module SGF
     def event input
       unless context.nil? or input.nil?
         case @state
+          when STATE_NODE
+            if input > "A" and input < "Z" or input > "a" and input < "z"
+              @state = STATE_PROP_NAME_BEGIN
+              self.buffer = input
+              return
+            end
+          when STATE_VALUE_BEGIN
+            if input == "]"
+              self.state = STATE_VALUE_END
+              context.property_value = buffer
+              clear_buffer
+              return
+            elsif input != "\\"
+              self.state = STATE_VALUE
+              self.buffer = input
+              return
+            end
           when STATE_VALUE
-            if input != "\\" and input != "]"
+            if input == "]"
+              self.state = STATE_VALUE_END
+              context.property_value = buffer
+              clear_buffer
+              return
+            elsif input != "\\"
               self.buffer += input
+              return
+            end
+          when STATE_VALUE_END
+            if input == "\n"
+              return
+            elsif input == ";"
+              self.state = STATE_NODE
+              context.start_node
+              return
+            elsif input > "A" and input < "Z" or input > "a" and input < "z"
+              @state = STATE_PROP_NAME_BEGIN
+              self.buffer = input
               return
             end
           when STATE_PROP_NAME_BEGIN, STATE_PROP_NAME
-            if input != "["
+            if input == "["
+              self.state = STATE_VALUE_BEGIN
+              context.property_name = buffer
+              clear_buffer
+            else
               self.buffer += input
-              return
             end
+            return
           when STATE_VALUE_ESCAPE
             self.buffer += input
             return
         end
       end
 
+      #puts input.inspect
       super input
     end
   end
