@@ -56,8 +56,8 @@ module SGF
                      STATE_PROP_NAME_BEGIN,
                      store_input_in_buffer
       
-      transition STATE_PROP_NAME_BEGIN,
-                     /[a-zA-Z]/,  
+      transition [STATE_PROP_NAME_BEGIN, STATE_PROP_NAME],
+                     /[a-zA-Z]/,
                      STATE_PROP_NAME,
                      append_input_to_buffer
       

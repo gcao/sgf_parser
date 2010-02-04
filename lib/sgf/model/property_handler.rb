@@ -26,10 +26,11 @@ module SGF
     # See http://www.red-bean.com/sgf/properties.html for property definitions
     GAME_PROPERTY_MAPPINGS = {
       'GM' => :game_type=, 'GN' => :name=, 'RU' => :rule=, 'SZ' => :board_size=, 'HA' => :handicap=, 'KM' => :komi=,
-      'PW' => :white_player=, 'BR' => :black_rank=, 'PB' => :black_player=, 'WR' => :white_rank=, 
+      'PW' => :white_player=, 'BR' => :black_rank=, 'PB' => :black_player=, 'WR' => :white_rank=,
+      'BT' => :black_team=, 'WT' => :white_team=,
       'DT' => :played_on=, 'TM' => :time_rule=, 'OT' => :overtime_rule=,
       'SY' => :program=, 'RE' => :result=, 'AP' => :program=, 'PC' => :place=, 'EV' => :event=, 'RO' => :round=,
-      'SO' => :source=
+      'SO' => :source=, 'AN' => :annotation=, 'GC' => :comment=
     }
 
     GAME_MISC_PROPERTIES = %w(FF US CA ST)

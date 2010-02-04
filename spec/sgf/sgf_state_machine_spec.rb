@@ -20,6 +20,7 @@ module SGF
         [SGFStateMachine::STATE_GAME_BEGIN,    ';', SGFStateMachine::STATE_NODE],
         [SGFStateMachine::STATE_NODE,          'A', SGFStateMachine::STATE_PROP_NAME_BEGIN],
         [SGFStateMachine::STATE_NODE,          ')', SGFStateMachine::STATE_VAR_END],
+        [SGFStateMachine::STATE_PROP_NAME,     'A', SGFStateMachine::STATE_PROP_NAME],
         [SGFStateMachine::STATE_PROP_NAME,     '[', SGFStateMachine::STATE_VALUE_BEGIN],
         [SGFStateMachine::STATE_VALUE_BEGIN,   'A', SGFStateMachine::STATE_VALUE],
         [SGFStateMachine::STATE_VALUE_BEGIN,   ']', SGFStateMachine::STATE_VALUE_END],
