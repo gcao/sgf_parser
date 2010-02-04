@@ -7,7 +7,7 @@ module SGF
       attr_accessor :game_type, :name, :rule, :board_size, :handicap, :komi, 
                     :black_player, :black_rank, :white_player, :white_rank,
                     :time_rule, :overtime_rule, :result, 
-                    :played_on, :program, :place, :event, :round
+                    :played_on, :program, :place, :event, :round, :source
 
       def initialize
         @game_type   = WEIQI

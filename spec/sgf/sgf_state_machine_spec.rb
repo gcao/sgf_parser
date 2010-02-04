@@ -132,6 +132,13 @@ module SGF
         @stm.event "V"
         @stm.buffer.should == "V"
       end
+
+      it "Transition from value escape to value should store input to buffer" do
+        @stm.buffer = "AB"
+        @stm.state = SGFStateMachine::STATE_VALUE_ESCAPE
+        @stm.event "V"
+        @stm.buffer.should == "ABV"
+      end
       
       it "Transition to value from value should append input to buffer" do
         @stm.buffer = "Valu"

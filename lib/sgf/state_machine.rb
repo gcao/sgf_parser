@@ -11,6 +11,7 @@ module SGF
     def initialize start_state
       @start_state = @state = start_state
       @transitions = {}
+      @buffer = ""
     end
     
     def desc description

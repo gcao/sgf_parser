@@ -28,7 +28,8 @@ module SGF
       'GM' => :game_type=, 'GN' => :name=, 'RU' => :rule=, 'SZ' => :board_size=, 'HA' => :handicap=, 'KM' => :komi=,
       'PW' => :white_player=, 'BR' => :black_rank=, 'PB' => :black_player=, 'WR' => :white_rank=, 
       'DT' => :played_on=, 'TM' => :time_rule=, 'OT' => :overtime_rule=,
-      'SY' => :program=, 'RE' => :result=, 'AP' => :program=, 'PC' => :place=, 'EV' => :event=, 'RO' => :round=
+      'SY' => :program=, 'RE' => :result=, 'AP' => :program=, 'PC' => :place=, 'EV' => :event=, 'RO' => :round=,
+      'SO' => :source=
     }
 
     GAME_MISC_PROPERTIES = %w(FF US CA ST)
