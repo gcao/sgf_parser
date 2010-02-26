@@ -13,7 +13,7 @@ module SGF
       NODE_MOVE  = 1
       NODE_PASS  = 2
       
-      POSITIONS = "abcdefghjklmnopqrst"
+      POSITIONS = "abcdefghijklmnopqrs"
     end
   end
 end
