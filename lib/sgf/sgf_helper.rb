@@ -1,5 +1,15 @@
 module SGF
   module SGFHelper
+    def xy_to_sgf_pos x, y
+      SGF::Model::Constants::POSITIONS[x, 1] + SGF::Model::Constants::POSITIONS[y, 1]
+    end
+
+    def move_to_sgf color, x, y
+      sgf = color == SGF::Model::Constants::WHITE ? "W" : "B"
+      sgf << xy_to_sgf_pos(x, y)
+      sgf << ";"
+    end
+
     def to_position_array input
       raise ArgumentError.new(input) if input.nil? or input !~ /^\s*\w\w(:\w\w)?\s*$/
 
