@@ -6,9 +6,9 @@ module SGF
 
     def move_to_sgf color, x, y
       sgf = color == SGF::Model::Constants::WHITE ? "W" : "B"
-      sgf << "["
+      sgf << ";["
       sgf << xy_to_sgf_pos(x, y)
-      sgf << "];"
+      sgf << "]"
     end
 
     def to_position_array input
