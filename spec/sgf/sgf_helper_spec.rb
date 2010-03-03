@@ -5,6 +5,18 @@ module SGF
     before :each do
       @helper = Object.new.extend(SGFHelper)
     end
+
+    describe "xy_to_sgf_pos" do
+      it "should convert x,y to sgf position string like ab" do
+        @helper.xy_to_sgf_pos(1, 2).should == "bc"
+      end
+    end
+
+    describe "move_to_sgf" do
+      it "should convert color, x, y to sgf like ;B[ab]" do
+        @helper.move_to_sgf(0, 1, 2).should == ";B[bc]"
+      end
+    end
     
     describe "to_position_array" do
       

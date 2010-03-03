@@ -5,8 +5,9 @@ module SGF
     end
 
     def move_to_sgf color, x, y
-      sgf = color == SGF::Model::Constants::WHITE ? "W" : "B"
-      sgf << ";["
+      sgf = ";"
+      sgf << (color == SGF::Model::Constants::WHITE ? "W" : "B")
+      sgf << "["
       sgf << xy_to_sgf_pos(x, y)
       sgf << "]"
     end
