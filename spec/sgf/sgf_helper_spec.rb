@@ -14,7 +14,7 @@ module SGF
 
     describe "move_to_sgf" do
       it "should convert color, x, y to sgf like ;B[ab]" do
-        @helper.move_to_sgf(0, 1, 2).should == ";B[bc]"
+        @helper.move_to_sgf(1, 1, 2).should == ";B[bc]"
       end
     end
     

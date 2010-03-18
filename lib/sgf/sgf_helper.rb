@@ -5,6 +5,8 @@ module SGF
     end
 
     def move_to_sgf color, x, y
+      return "" unless [SGF::Model::Constants::BLACK, SGF::Model::Constants::WHITE].include?(color)
+
       sgf = ";"
       sgf << (color == SGF::Model::Constants::WHITE ? "W" : "B")
       sgf << "["
