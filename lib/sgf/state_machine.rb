@@ -32,8 +32,7 @@ module SGF
         return
       end
       
-      transition = self.transitions[before_state]
-      self.transitions[before_state] = transition = [] unless transition
+      transition = self.transitions[before_state] ||= []
       transition << Transition.new(@description, condition, before_state, event_pattern, after_state, callback)
       
       @description = nil
