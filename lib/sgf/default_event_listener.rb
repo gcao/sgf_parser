@@ -22,6 +22,10 @@ module SGF
       debug "property_value = '#{value}'"
     end
     
+    def end_node
+      debug 'end_node'
+    end
+
     def start_variation
       debug "start_variation"
     end

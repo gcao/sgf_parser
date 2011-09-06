@@ -1,0 +1,50 @@
+Parsing flow: 
+
+  Create game
+Read (
+  Create variation, add to game
+Read ;
+  Create node
+Read GM  => property name
+Read [   => property value begin
+Read 1   => property value
+Read ]   => property value end
+  Add property to node
+  Merge property if node has property with same name
+Read ;
+  Node end
+  Create child node
+Read )
+  Node end, remove empty node
+  Variation end
+Read EOS (end of stream)
+  Game end
+
+
+
+
+json data structure
+{
+  type: 'Game',
+  nodes: [
+    {
+      type: 'Node',
+      properties: {
+        GM: '1',
+        GN: '2009 US Go Open'
+      }
+    },
+    {
+      type: 'Node',
+      properties: {
+        B: 'pd',
+      },
+      variations: [
+        {
+          type: 'Variation',
+          nodes: []
+        }
+      ]
+    }
+  ]
+}

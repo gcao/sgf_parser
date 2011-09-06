@@ -20,7 +20,7 @@ filename = ARGV[0]
 debug    = ENV["DEBUG"] == "true"
 
 if File.directory?(filename)
-  Dir["#{filename}/**/*"].each do |file|
+  Dir["#{filename}/**/*.sgf", "#{filename}/**/*.SGF"].each do |file|
     SGF::Parser.parse_file(file, debug)
   end
 else
