@@ -170,6 +170,41 @@ module SGF
     end
   end
   
+  describe Parser, 'with SGF::EventListener' do
+    before :each do
+      @listener = SGF::EventListener.new
+      @parser   = Parser.new @listener
+    end
+    
+    it "should parse a complete game" do
+      @parser.parse <<-INPUT
+      (;GM[1]FF[3]
+      RU[Japanese]SZ[19]HA[0]KM[5.5]
+      PW[White]
+      PB[Black]
+      GN[White (W) vs. Black (B)]
+      DT[1999-07-28]
+      RE[W+R]
+      SY[Cgoban 1.9.2]TM[30:00(5x1:00)];
+      AW[ea][eb][ec][bd][dd][ae][ce][de][cf][ef][cg][dg][eh][ci][di][bj][ej]
+      AB[da][db][cc][dc][cd][be][bf][ag][bg][bh][ch][dh]LB[bd:A]PL[2]
+      C[guff plays A and adum tenukis to fill a 1-point ko. white to kill.
+      ]
+      (;W[bc];B[bb]
+      (;W[ca];B[cb]
+      (;W[ab];B[ba]
+      (;W[bi]
+      C[RIGHT black can't push (but no such luck in the actual game)
+      ])
+      )))
+      )
+      INPUT
+      game = @listener.game
+      p game
+      game.root_node['GM'].should == 1
+    end
+  end
+  
   describe "class methods" do
     it "parse should take a String and parse it and return the game" do
       game = SGF::Parser.parse <<-INPUT
