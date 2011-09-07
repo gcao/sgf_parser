@@ -21,8 +21,12 @@ module SGF
 
     def end_node
       super
+      
+      return unless @node
 
       @variations.last.nodes << @node unless @node.empty?
+      
+      @node = nil
     end
     
     def property_name= name

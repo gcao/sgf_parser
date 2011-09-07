@@ -34,13 +34,13 @@ module SGF
     
     class << self
       def parse input, debug = false
-        parser = SGF::Parser.new(SGF::Model::EventListener.new(debug))
+        parser = SGF::Parser.new(SGF::EventListener.new(debug))
         parser.parse input
         parser.event_listener.game
       end
     
       def parse_file filename, debug = false
-        parser = SGF::Parser.new(SGF::Model::EventListener.new(debug))
+        parser = SGF::Parser.new(SGF::EventListener.new(debug))
         parser.parse_file filename
         parser.event_listener.game
       end

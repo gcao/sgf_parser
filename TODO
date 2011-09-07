@@ -1,3 +1,6 @@
+Add guard to project to make sure specs always pass whenever a change is made
+See https://github.com/guard/guard
+
 Parsing flow: 
 
   Create game

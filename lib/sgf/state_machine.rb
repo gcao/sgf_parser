@@ -58,7 +58,12 @@ module SGF
       
       if transition
         @state = transition.after_state unless transition.after_state.nil?
-        transition.callback.call(self) unless transition.callback.nil?
+        
+        case transition.callback
+          when Proc then transition.callback.call(self)
+          when Symbol, String then send transition.callback
+        end
+        
         true
       else
         false
