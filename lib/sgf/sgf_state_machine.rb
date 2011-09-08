@@ -13,19 +13,21 @@ module SGF
       
       def end_game
         return if context.nil?
-        context.end_node
         context.end_game
       end
       
       def start_node
         return if context.nil?
-        context.end_node
         context.start_node
+      end
+      
+      def end_node
+        return if context.nil?
+        context.end_node
       end
       
       def start_variation
         return if context.nil?
-        context.end_node
         context.start_variation
       end
       
@@ -53,7 +55,6 @@ module SGF
       
       def end_variation
         return if context.nil?
-        context.end_node
         context.end_variation
       end
       
@@ -82,81 +83,96 @@ module SGF
       super(STATE_BEGIN)
 
       transition STATE_BEGIN,        
-                     /\(/,        
-                     STATE_GAME_BEGIN,
-                     :start_game
+                 /\(/,        
+                 STATE_GAME_BEGIN,
+                 :start_game
                            
-      transition [STATE_GAME_BEGIN, STATE_VAR_BEGIN, STATE_VAR_END, STATE_VALUE_END],   
-                     /;/,
-                     STATE_NODE_BEGIN,
-                     :start_node
+      transition [STATE_GAME_BEGIN, STATE_VAR_BEGIN, STATE_VAR_END],
+                 /;/,
+                 STATE_NODE_BEGIN,
+                 :start_node
+                           
+      transition STATE_VALUE_END,
+                 /;/,
+                 STATE_NODE_BEGIN,
+                 lambda {|stm| stm.end_node; stm.start_node }
 
       transition STATE_NODE_BEGIN,
-                     /;/,
-                     nil
-      
-      transition [STATE_NODE_BEGIN, STATE_VAR_END, STATE_VALUE_END],
-                     /\(/,   
-                     STATE_VAR_BEGIN,
-                     :start_variation
+                 /;/,
+                 nil
       
       transition [STATE_NODE_BEGIN, STATE_VALUE_END],
-                     /[a-zA-Z]/,  
-                     STATE_PROP_NAME_BEGIN,
-                     :store_input_in_buffer
+                 /\(/,
+                 STATE_VAR_BEGIN,
+                 lambda {|stm| stm.end_node; stm.start_variation }
+                     
+      transition STATE_VAR_END,
+                 /\(/,   
+                 STATE_VAR_BEGIN,
+                 :start_variation
+      
+      transition [STATE_NODE_BEGIN, STATE_VALUE_END],
+                 /[a-zA-Z]/,  
+                 STATE_PROP_NAME_BEGIN,
+                 :store_input_in_buffer
       
       transition [STATE_PROP_NAME_BEGIN, STATE_PROP_NAME],
-                     /[a-zA-Z]/,
-                     STATE_PROP_NAME,
-                     :append_input_to_buffer
+                 /[a-zA-Z]/,
+                 STATE_PROP_NAME,
+                 :append_input_to_buffer
       
       transition [STATE_PROP_NAME_BEGIN, STATE_PROP_NAME],    
-                     /\[/,        
-                     STATE_VALUE_BEGIN,
-                     :set_property_name
+                 /\[/,        
+                 STATE_VALUE_BEGIN,
+                 :set_property_name
         
       transition STATE_VALUE_END,
-                     /\[/,        
-                     STATE_VALUE_BEGIN
+                 /\[/,        
+                 STATE_VALUE_BEGIN
                      
       transition STATE_VALUE_BEGIN,
-                     /[^\]]/,
-                     STATE_VALUE,
-                     :store_input_in_buffer
+                 /[^\]]/,
+                 STATE_VALUE,
+                 :store_input_in_buffer
                        
       transition [STATE_VALUE_BEGIN, STATE_VALUE],
-                     /\\/,
-                     STATE_VALUE_ESCAPE
+                 /\\/,
+                 STATE_VALUE_ESCAPE
                        
       transition STATE_VALUE_ESCAPE,
-                     /./,
-                     STATE_VALUE,
-                     :append_input_to_buffer
+                 /./,
+                 STATE_VALUE,
+                 :append_input_to_buffer
                        
       transition STATE_VALUE,
-                     /[^\]]/,
-                     nil,
-                     :append_input_to_buffer
+                 /[^\]]/,
+                 nil,
+                 :append_input_to_buffer
                        
       transition [STATE_VALUE_BEGIN, STATE_VALUE],        
-                     /\]/,        
-                     STATE_VALUE_END,
-                     :set_property_value
+                 /\]/,        
+                 STATE_VALUE_END,
+                 :set_property_value
                        
       transition STATE_VAR_END,        
-                     nil,        
-                     STATE_GAME_END,
-                     :end_game
+                 nil,        
+                 STATE_GAME_END,
+                 :end_game
     
-      transition [STATE_NODE_BEGIN, STATE_VALUE_END, STATE_VAR_END],
-                     /\)/,        
-                     STATE_VAR_END,
-                     :end_variation
+      transition [STATE_NODE_BEGIN, STATE_VALUE_END],
+                 /\)/,        
+                 STATE_VAR_END,
+                 lambda {|stm| stm.end_node; stm.end_variation }
+    
+      transition STATE_VAR_END,
+                 /\)/,        
+                 STATE_VAR_END,
+                 :end_variation
 
       transition [STATE_BEGIN, STATE_GAME_BEGIN, STATE_NODE_BEGIN, STATE_VAR_BEGIN, STATE_VAR_END, STATE_PROP_NAME_BEGIN, STATE_PROP_NAME, STATE_VALUE_END],
-                     /[^\s]/, 
-                     STATE_INVALID,
-                     :report_error
+                 /[^\s]/, 
+                 STATE_INVALID,
+                 :report_error
     end
 
   end

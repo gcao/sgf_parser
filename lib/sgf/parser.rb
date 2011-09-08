@@ -14,10 +14,11 @@ module SGF
       raise ArgumentError.new if input.nil? or input.strip.empty?
       
       input.strip!
-        
-      0.upto(input.size - 1) do |i|
-        @position = i
-        @stm.event(input[i,1])
+      
+      @position = 0
+      input.each_char do |char|
+        @stm.event(char)
+        @position += 1
       end
       
       @stm.end

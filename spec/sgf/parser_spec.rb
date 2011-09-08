@@ -200,8 +200,8 @@ module SGF
       )
       INPUT
       game = @listener.game
-      p game
-      game.root_node['GM'].should == 1
+
+      game.root_node['GM'].should == '1'
     end
   end
   
