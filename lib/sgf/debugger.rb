@@ -1,15 +1,10 @@
 module SGF
   module Debugger
-    def enable_debug_mode
-      @debug_mode = true
-    end
-    
-    def disable_debug_mode
-      @debug_mode = false
-    end
-    
-    def debug message
-      puts message if @debug_mode
+    def debug message = nil
+      return unless @debug_mode
+
+      puts message if message
+      puts yield if block_given?
     end
   end
 end

@@ -202,6 +202,15 @@ module SGF
       game = @listener.game
 
       game.root_node['GM'].should == '1'
+      game.root_node['FF'].should == '3'
+      game.root_node['RU'].should == 'Japanese'
+      game.root_node['SZ'].should == '19'
+      game.root_node['HA'].should == '0'
+      game.root_node['KM'].should == '5.5'
+      game.root_node['PW'].should == 'White'
+      
+      game.nodes[1]['AW'].should == %w(ea eb ec bd dd ae ce de cf ef cg dg eh ci di bj ej)
+      game.nodes[1]['C'].should == "guff plays A and adum tenukis to fill a 1-point ko. white to kill."
     end
   end
   

@@ -44,14 +44,13 @@ module SGF
     def start_variation
       super
       
-      @variations << Variation.new(@node)
+      @variations << Variation.new(@variations.last.nodes.last)
     end
 
     def end_variation
       super
       
-      variation = @variations.pop
-      @node = variation.parent
+      @variations.pop
     end
   end
 end
