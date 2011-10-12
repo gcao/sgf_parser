@@ -1,0 +1,27 @@
+{
+  "type": "Game",
+  "children": [
+    {
+      "RU": "Japanese",
+      "GM": "1",
+      "FF": "3"
+    },
+    {
+      "type": "SetupNode",
+      "AW": ["ea", "eb", "ec"],
+      "AB": ["da", "db", "cc"],
+      "C": "guff plays A and adum to fill a 1-point ko. white to kill.",
+      "variations": [
+        {
+          "type": "Variation",
+          "children": [
+            {
+              "type": "Node",
+              "B": "pd"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

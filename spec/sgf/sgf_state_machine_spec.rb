@@ -14,7 +14,7 @@ module SGF
       it "should have start_state of #{SGFStateMachine::STATE_BEGIN}" do
         @stm.start_state.should == SGFStateMachine::STATE_BEGIN
       end
-    
+
       [
         [SGFStateMachine::STATE_BEGIN,         '(', SGFStateMachine::STATE_GAME_BEGIN],
         [SGFStateMachine::STATE_GAME_BEGIN,    ';', SGFStateMachine::STATE_NODE],
@@ -41,13 +41,13 @@ module SGF
           @stm.state.should == state_after
         end
       end
-      
+
       it "end should trigger transition to game_end" do
         @stm.state = SGFStateMachine::STATE_VAR_END
         @stm.end
         @stm.state.should == SGFStateMachine::STATE_GAME_END
       end
-      
+
       it "should handle escaped characters" do
         @stm.state = SGFStateMachine::STATE_VALUE
         @stm.event '\\'
@@ -55,7 +55,7 @@ module SGF
         @stm.event ']'
         @stm.state.should == SGFStateMachine::STATE_VALUE
       end
-      
+
       [
         [SGFStateMachine::STATE_BEGIN           , 'A'],
         [SGFStateMachine::STATE_GAME_BEGIN      , '['],
@@ -74,7 +74,7 @@ module SGF
         end
       end
     end
-  
+
     describe "with context" do
       before :each do
         @context = Object.new
@@ -82,25 +82,25 @@ module SGF
         @stm.context = @context
         @stm.reset
       end
-      
+
       it "Transition to game begin should call context.start_game" do
         mock(@context).start_game
         @stm.state = SGFStateMachine::STATE_BEGIN
         @stm.event "("
       end
-      
+
       it "Transition to node should call context.start_node" do
         mock(@context).start_node
         @stm.state = SGFStateMachine::STATE_GAME_BEGIN
         @stm.event ";"
       end
-      
+
       it "Transition to variation begin should call context.start_variation" do
         mock(@context).start_variation
         @stm.state = SGFStateMachine::STATE_NODE
         @stm.event "("
       end
-      
+
       it "Transition to prop name begin should set store input to buffer" do
         @stm.state = SGFStateMachine::STATE_NODE
         @stm.event "A"
@@ -113,20 +113,20 @@ module SGF
         @stm.event "B"
         @stm.buffer.should == "AB"
       end
-      
+
       it "Transition to game variation end should call context.end_variation" do
         mock(@context).end_variation
         @stm.state = SGFStateMachine::STATE_VALUE_END
         @stm.event ")"
       end
-      
+
       it "Transition to value begin should call context.property_name= with buffer" do
         mock(@context).property_name = "AB"
         @stm.buffer = "AB"
         @stm.state = SGFStateMachine::STATE_PROP_NAME
         @stm.event "["
       end
-      
+
       it "Transition to value should store input to buffer" do
         @stm.buffer = "AB"
         @stm.state = SGFStateMachine::STATE_VALUE_BEGIN
@@ -140,27 +140,27 @@ module SGF
         @stm.event "V"
         @stm.buffer.should == "ABV"
       end
-      
+
       it "Transition to value from value should append input to buffer" do
         @stm.buffer = "Valu"
         @stm.state = SGFStateMachine::STATE_VALUE
         @stm.event "e"
         @stm.buffer.should == "Value"
       end
-      
+
       it "Transition to value end should call context.property_value" do
         mock(@context).property_value = "Value"
         @stm.buffer = "Value"
         @stm.state = SGFStateMachine::STATE_VALUE
         @stm.event "]"
       end
-      
+
       it "Transition to node from variation begin should not create node" do
         dont_allow(@context).start_node
         @stm.state = SGFStateMachine::STATE_VAR_BEGIN
         @stm.event ";"
       end
     end
-    
+
   end
 end

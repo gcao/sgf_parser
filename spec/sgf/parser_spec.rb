@@ -17,60 +17,60 @@ module SGF
         end
       end
     end
-    
+
     it "should call start_game" do
       mock(@listener).start_game
       @parser.parse("(")
     end
-    
+
     it "should call end_game" do
       mock(@listener).end_game
       @parser.parse("(;)")
     end
-    
+
     it "should call start_node" do
       mock(@listener).start_node
       @parser.parse("(;")
     end
-    
+
     it "should call end_variation" do
       mock(@listener).end_variation
       @parser.parse("(;)")
     end
-    
+
     it "should call property_name= with name" do
       mock(@listener).property_name = 'GN'
       @parser.parse("(;GN[)")
     end
-    
+
     it "should call property_value= with value" do
       mock(@listener).property_value = 'a game'
       @parser.parse("(;GN[a game])")
     end
-    
+
     it "should call property_value= for each value" do
       mock(@listener).property_value = 'DB'
       mock(@listener).property_value = 'KS'
       @parser.parse("(;AB[DB][KS])")
     end
-    
+
     it "should call start_variation" do
       mock(@listener).start_variation
       @parser.parse("(;(")
     end
-    
+
     it "should call end_variation" do
       mock(@listener).end_variation
       @parser.parse("(;(;)")
     end
   end
-  
+
   describe Parser, 'with SGF::Model::EventListener' do
     before :each do
       @listener = SGF::Model::EventListener.new
       @parser   = Parser.new @listener
     end
-    
+
     it "should parse game in file" do
       @parser.parse_file File.expand_path(File.dirname(__FILE__) + '/../fixtures/good.sgf')
       game = @listener.game
@@ -85,14 +85,14 @@ module SGF
       game.program.should == 'Cgoban 1.9.2'
       game.time_rule.should == '30:00(5x1:00)'
     end
-    
+
     it "should raise BinaryFileError on parsing binary file" do
       pending 'check if file is binary is problematic'
       lambda {
         @parser.parse_file File.expand_path(File.dirname(__FILE__) + '/../fixtures/test.png')
       }.should raise_error(SGF::BinaryFileError)
     end
-    
+
     it "should parse game without moves" do
       @parser.parse <<-INPUT
       (;GM[1]FF[3]
@@ -102,11 +102,11 @@ module SGF
       game = @listener.game
       game.name.should == 'White (W) vs. Black (B)'
     end
-    
+
     it "should raise error on invalid input" do
       lambda { @parser.parse("123") }.should raise_error
     end
-    
+
     it "should parse a complete game" do
       @parser.parse <<-INPUT
       (;GM[1]FF[3]
@@ -142,10 +142,10 @@ module SGF
       game.black_player.should == 'Black'
       game.program.should == 'Cgoban 1.9.2'
       game.time_rule.should == '30:00(5x1:00)'
-      
+
       root_node = game.root_node
       root_node.node_type.should == SGF::Model::Constants::NODE_SETUP
-      
+
       node2 = root_node.child
       node2.node_type.should == SGF::Model::Constants::NODE_SETUP
       node2.trunk?.should be_true
@@ -161,7 +161,7 @@ module SGF
       var1_root.variation_root?.should be_true
       var1_root.color.should == SGF::Model::Constants::WHITE
       var1_root.move.should == [1, 2]
-      
+
       var1_node2 = var1_root.child
       var1_node2.trunk?.should be_false
       var1_node2.variation_root?.should_not be_true
@@ -169,13 +169,13 @@ module SGF
       var1_node2.move.should == [1, 1]
     end
   end
-  
+
   describe Parser, 'with SGF::EventListener' do
     before :each do
       @listener = SGF::EventListener.new
       @parser   = Parser.new @listener
     end
-    
+
     it "should parse a complete game" do
       @parser.parse <<-INPUT
       (;GM[1]FF[3]
@@ -208,12 +208,16 @@ module SGF
       game.root_node['HA'].should == '0'
       game.root_node['KM'].should == '5.5'
       game.root_node['PW'].should == 'White'
-      
-      game.nodes[1]['AW'].should == %w(ea eb ec bd dd ae ce de cf ef cg dg eh ci di bj ej)
-      game.nodes[1]['C'].should == "guff plays A and adum tenukis to fill a 1-point ko. white to kill."
+
+      game.children[1]['AW'].should == %w(ea eb ec bd dd ae ce de cf ef cg dg eh ci di bj ej)
+      game.children[1]['C'].should == "guff plays A and adum tenukis to fill a 1-point ko. white to kill."
+
+      node = game.children[1]
+      node.variations.size.should == 1
+      node.variations.first.children.first['W'].should == 'bc'
     end
   end
-  
+
   describe "class methods" do
     it "parse should take a String and parse it and return the game" do
       game = SGF::Parser.parse <<-INPUT
@@ -223,7 +227,7 @@ module SGF
       INPUT
       game.name.should == 'White (W) vs. Black (B)'
     end
-    
+
     it "parse should pass debug parameter to event listener" do
       event_listener = SGF::Model::EventListener.new(false)
       mock(SGF::Model::EventListener).new(true) {event_listener}
@@ -241,11 +245,11 @@ module SGF
       game = SGF::Parser.parse_file(File.expand_path(File.dirname(__FILE__) + '/../fixtures/good.sgf'), true)
       game.name.should == 'White (W) vs. Black (B)'
     end
-    
+
     it "should parse game with escaped []" do
       game = SGF::Parser.parse_file(File.expand_path(File.dirname(__FILE__) + '/../fixtures/good1.sgf'))
     end
-    
+
     it "is_binary? should return true for binary file" do
       pending 'check if file is binary is problematic'
       SGF::Parser.is_binary?(File.expand_path(File.dirname(__FILE__) + '/../fixtures/test.png')).should be_true

@@ -6,7 +6,23 @@ module SGF
     end
 
     def root_node
-      @nodes.first
+      @children.first
+    end
+
+    def properties
+      root_node.properties
+    end
+
+    def [] name
+      root_node[name]
+    end
+
+    def cleanup
+      raise "Not a valid game" unless root_node
+
+      @children.each do |child|
+        child.cleanup
+      end
     end
 
   end

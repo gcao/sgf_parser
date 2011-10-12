@@ -1,12 +1,21 @@
 module SGF
-  class Variation < Array
+  class Variation
 
     attr :parent
-    attr :nodes
+    attr :children
 
     def initialize parent
       @parent = parent
-      @nodes = []
+
+      parent.variations << self if parent
+
+      @children = []
+    end
+
+    def cleanup
+      @children.each do |child|
+        child.cleanup
+      end
     end
 
   end

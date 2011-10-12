@@ -2,6 +2,7 @@ $:.push(File.dirname(__FILE__) + '/../lib')
 
 require 'rubygems'
 require 'spec'
+require 'ap'
 
 Spec::Runner.configure do |config|
   # If you're not using ActiveRecord you should remove these
