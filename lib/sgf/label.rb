@@ -1,4 +1,4 @@
-class SGF::Model::Label
+class SGF::Label
   attr_accessor :position, :text
   
   def initialize position, text

@@ -17,9 +17,9 @@ module SGF
 
       [
         [SGFStateMachine::STATE_BEGIN,         '(', SGFStateMachine::STATE_GAME_BEGIN],
-        [SGFStateMachine::STATE_GAME_BEGIN,    ';', SGFStateMachine::STATE_NODE],
-        [SGFStateMachine::STATE_NODE,          'A', SGFStateMachine::STATE_PROP_NAME_BEGIN],
-        [SGFStateMachine::STATE_NODE,          ')', SGFStateMachine::STATE_VAR_END],
+        [SGFStateMachine::STATE_GAME_BEGIN,    ';', SGFStateMachine::STATE_NODE_BEGIN],
+        [SGFStateMachine::STATE_NODE_BEGIN,          'A', SGFStateMachine::STATE_PROP_NAME_BEGIN],
+        [SGFStateMachine::STATE_NODE_BEGIN,          ')', SGFStateMachine::STATE_VAR_END],
         [SGFStateMachine::STATE_PROP_NAME,     'A', SGFStateMachine::STATE_PROP_NAME],
         [SGFStateMachine::STATE_PROP_NAME,     '[', SGFStateMachine::STATE_VALUE_BEGIN],
         [SGFStateMachine::STATE_VALUE_BEGIN,   'A', SGFStateMachine::STATE_VALUE],
@@ -27,12 +27,12 @@ module SGF
         [SGFStateMachine::STATE_VALUE,         ']', SGFStateMachine::STATE_VALUE_END],
         [SGFStateMachine::STATE_VALUE,         '\\', SGFStateMachine::STATE_VALUE_ESCAPE],
         [SGFStateMachine::STATE_VALUE_ESCAPE,  ']', SGFStateMachine::STATE_VALUE],
-        [SGFStateMachine::STATE_VALUE_END,     ';', SGFStateMachine::STATE_NODE],
+        [SGFStateMachine::STATE_VALUE_END,     ';', SGFStateMachine::STATE_NODE_BEGIN],
         [SGFStateMachine::STATE_VALUE_END,     '(', SGFStateMachine::STATE_VAR_BEGIN],
         [SGFStateMachine::STATE_VALUE_END,     ')', SGFStateMachine::STATE_VAR_END],
         [SGFStateMachine::STATE_VALUE_END,     'A', SGFStateMachine::STATE_PROP_NAME_BEGIN],
-        [SGFStateMachine::STATE_VAR_BEGIN,     ';', SGFStateMachine::STATE_NODE],
-        [SGFStateMachine::STATE_VAR_END,       ';', SGFStateMachine::STATE_NODE],
+        [SGFStateMachine::STATE_VAR_BEGIN,     ';', SGFStateMachine::STATE_NODE_BEGIN],
+        [SGFStateMachine::STATE_VAR_END,       ';', SGFStateMachine::STATE_NODE_BEGIN],
         [SGFStateMachine::STATE_VAR_END,       '(', SGFStateMachine::STATE_VAR_BEGIN]
       ].each do |state_before, input, state_after|
         it "should have transition for '#{state_before}' + '#{input}' => '#{state_after}'" do
@@ -59,7 +59,7 @@ module SGF
       [
         [SGFStateMachine::STATE_BEGIN           , 'A'],
         [SGFStateMachine::STATE_GAME_BEGIN      , '['],
-        [SGFStateMachine::STATE_NODE            , '['],
+        [SGFStateMachine::STATE_NODE_BEGIN            , '['],
         [SGFStateMachine::STATE_VAR_BEGIN       , '['],
         [SGFStateMachine::STATE_VAR_END         , '['],
         [SGFStateMachine::STATE_PROP_NAME_BEGIN , ']'],
@@ -96,13 +96,14 @@ module SGF
       end
 
       it "Transition to variation begin should call context.start_variation" do
+        mock(@context).end_node
         mock(@context).start_variation
-        @stm.state = SGFStateMachine::STATE_NODE
+        @stm.state = SGFStateMachine::STATE_NODE_BEGIN
         @stm.event "("
       end
 
       it "Transition to prop name begin should set store input to buffer" do
-        @stm.state = SGFStateMachine::STATE_NODE
+        @stm.state = SGFStateMachine::STATE_NODE_BEGIN
         @stm.event "A"
         @stm.buffer.should == "A"
       end
@@ -115,6 +116,7 @@ module SGF
       end
 
       it "Transition to game variation end should call context.end_variation" do
+        mock(@context).end_node
         mock(@context).end_variation
         @stm.state = SGFStateMachine::STATE_VALUE_END
         @stm.event ")"
@@ -156,6 +158,7 @@ module SGF
       end
 
       it "Transition to node from variation begin should not create node" do
+        pending
         dont_allow(@context).start_node
         @stm.state = SGFStateMachine::STATE_VAR_BEGIN
         @stm.event ";"
