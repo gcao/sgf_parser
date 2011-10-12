@@ -69,29 +69,14 @@ module SGF
     before :each do
       @listener = SGF::EventListener.new
       @parser   = Parser.new @listener
-      pending
     end
 
     it "should parse game in file" do
       @parser.parse_file File.expand_path(File.dirname(__FILE__) + '/../fixtures/good.sgf')
       game = @listener.game
-      game.name.should == 'White (W) vs. Black (B)'
-      game.rule.should == 'Japanese'
-      game.board_size.should == 19
-      game.handicap.should == 0
-      game.komi.should == 5.5
-      game.played_on.should == "1999-07-28"
-      game.white_player.should == 'White'
-      game.black_player.should == 'Black'
-      game.program.should == 'Cgoban 1.9.2'
-      game.time_rule.should == '30:00(5x1:00)'
-    end
-
-    it "should raise BinaryFileError on parsing binary file" do
-      pending 'check if file is binary is problematic'
-      lambda {
-        @parser.parse_file File.expand_path(File.dirname(__FILE__) + '/../fixtures/test.png')
-      }.should raise_error(SGF::BinaryFileError)
+      game['GN'].should == 'White (W) vs. Black (B)'
+      game['RU'].should == 'Japanese'
+      game['SZ'].should == '19'
     end
 
     it "should parse game without moves" do
@@ -101,7 +86,7 @@ module SGF
       )
       INPUT
       game = @listener.game
-      game.name.should == 'White (W) vs. Black (B)'
+      game['GN'].should == 'White (W) vs. Black (B)'
     end
 
     it "should raise error on invalid input" do
@@ -132,53 +117,14 @@ module SGF
       )
       INPUT
       game = @listener.game
-      game.name.should == 'White (W) vs. Black (B)'
-      game.rule.should == 'Japanese'
-      game.board_size.should == 19
-      game.handicap.should == 0
-      game.komi.should == 5.5
-      game.result.should == 'W+R'
-      game.played_on.should == "1999-07-28"
-      game.white_player.should == 'White'
-      game.black_player.should == 'Black'
-      game.program.should == 'Cgoban 1.9.2'
-      game.time_rule.should == '30:00(5x1:00)'
 
-      root_node = game.root_node
-    end
-
-    it "should parse a complete game" do
-      @parser.parse <<-INPUT
-      (;GM[1]FF[3]
-      RU[Japanese]SZ[19]HA[0]KM[5.5]
-      PW[White]
-      PB[Black]
-      GN[White (W) vs. Black (B)]
-      DT[1999-07-28]
-      RE[W+R]
-      SY[Cgoban 1.9.2]TM[30:00(5x1:00)];
-      AW[ea][eb][ec][bd][dd][ae][ce][de][cf][ef][cg][dg][eh][ci][di][bj][ej]
-      AB[da][db][cc][dc][cd][be][bf][ag][bg][bh][ch][dh]LB[bd:A]PL[2]
-      C[guff plays A and adum tenukis to fill a 1-point ko. white to kill.
-      ]
-      (;W[bc];B[bb]
-      (;W[ca];B[cb]
-      (;W[ab];B[ba]
-      (;W[bi]
-      C[RIGHT black can't push (but no such luck in the actual game)
-      ])
-      )))
-      )
-      INPUT
-      game = @listener.game
-
-      game.root_node['GM'].should == '1'
-      game.root_node['FF'].should == '3'
-      game.root_node['RU'].should == 'Japanese'
-      game.root_node['SZ'].should == '19'
-      game.root_node['HA'].should == '0'
-      game.root_node['KM'].should == '5.5'
-      game.root_node['PW'].should == 'White'
+      game['GM'].should == '1'
+      game['FF'].should == '3'
+      game['RU'].should == 'Japanese'
+      game['SZ'].should == '19'
+      game['HA'].should == '0'
+      game['KM'].should == '5.5'
+      game['PW'].should == 'White'
 
       game.children[1]['AW'].should == %w(ea eb ec bd dd ae ce de cf ef cg dg eh ci di bj ej)
       game.children[1]['C'].should == "guff plays A and adum tenukis to fill a 1-point ko. white to kill."

@@ -157,12 +157,6 @@ module SGF
         @stm.event "]"
       end
 
-      it "Transition to node from variation begin should not create node" do
-        pending
-        dont_allow(@context).start_node
-        @stm.state = SGFStateMachine::STATE_VAR_BEGIN
-        @stm.event ";"
-      end
     end
 
   end
