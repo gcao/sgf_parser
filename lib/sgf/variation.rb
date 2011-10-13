@@ -18,5 +18,13 @@ module SGF
       end
     end
 
+    def to_hash
+      hash_obj = {:type => 'Variation'}
+      hash_obj[:children] = children.map do |node|
+        node.to_hash
+      end
+      hash_obj
+    end
+
   end
 end

@@ -2,12 +2,13 @@
   "type": "Game",
   "children": [
     {
+      "type": "Node",
       "RU": "Japanese",
       "GM": "1",
       "FF": "3"
     },
     {
-      "type": "SetupNode",
+      "type": "Node",
       "AW": ["ea", "eb", "ec"],
       "AB": ["da", "db", "cc"],
       "C": "guff plays A and adum to fill a 1-point ko. white to kill.",

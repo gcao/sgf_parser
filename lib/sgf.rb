@@ -5,7 +5,6 @@ require File.expand_path(File.dirname(__FILE__) + '/sgf/sgf_state_machine')
 require File.expand_path(File.dirname(__FILE__) + '/sgf/default_event_listener')
 require File.expand_path(File.dirname(__FILE__) + '/sgf/parser')
 require File.expand_path(File.dirname(__FILE__) + '/sgf/parse_error')
-require File.expand_path(File.dirname(__FILE__) + '/sgf/binary_file_error')
 require File.expand_path(File.dirname(__FILE__) + '/sgf/sgf_helper')
 
 require File.expand_path(File.dirname(__FILE__) + '/sgf/node')

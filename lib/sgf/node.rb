@@ -51,5 +51,16 @@ module SGF
       end
     end
 
+    def to_hash
+      hash_obj = {:type => 'Node'}
+      hash_obj.merge! @properties
+      unless @variations.nil? or @variations.empty?
+        hash_obj[:variations] = @variations.map do |variation|
+          variation.to_hash
+        end
+      end
+      hash_obj
+    end
+
   end
 end

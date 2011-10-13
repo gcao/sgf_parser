@@ -5,6 +5,6 @@ guard 'bundler' do
 end
 
 guard 'shell' do
-  watch(%r{^lib/.+\.rb$}) { `spec spec` }
+  watch(%r{^(lib|spec)/.+\.rb$}) { `spec spec` }
 end
 

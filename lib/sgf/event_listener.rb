@@ -51,8 +51,8 @@ module SGF
     def end_variation
       super
 
-      parent_node = @variation.parent
-      @variation = parent_node.nil? ? @game : parent_node.parent
+      @node = @variation.parent
+      @variation = @node.nil? ? @game : @node.parent
     end
 
   end
