@@ -20,10 +20,14 @@ Gem::Specification.new do |s|
   ]
   s.files = [
     ".irbrc",
+    ".rvmrc",
+    "Gemfile",
+    "Gemfile.lock",
     "LICENSE",
     "README.textile",
     "Rakefile",
     "TODO",
+    "VERSION",
     "bin/sgf",
     "bin/stm2dot",
     "doc/sgf_state_machine.dot",
