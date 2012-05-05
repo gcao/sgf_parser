@@ -41,8 +41,12 @@ module SGF
       
       input.strip!
       input.downcase!
-      
-      [input[0] - ?a, input[1] - ?a]
+
+      if RUBY_VERSION[0..2] == "1.9"
+        [input[0].ord - ?a.ord, input[1].ord - ?a.ord]
+      else
+        [input[0] - ?a, input[1] - ?a]
+      end
     end
     
     def to_label input
